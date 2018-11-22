@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Festispec_WebApp.Helpers;
 using Festispec_WebApp.Models;
 using Festispec_WebApp.Services;
 using Microsoft.AspNetCore.Builder;
@@ -24,13 +25,14 @@ namespace Festispec_WebApp
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IAccountService, AccountService>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddDbContext<FSContext>(options =>
                 options.UseSqlServer("Server=tcp:berm.database.windows.net,1433;Initial Catalog=festispec;Persist Security Info=False;User ID=berm;Password=Bart_2018!;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;"));
@@ -41,6 +43,12 @@ namespace Festispec_WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json",
+                    optional: false,
+                    reloadOnChange: true);
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -49,9 +57,9 @@ namespace Festispec_WebApp
             {
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseMvc();
+            Configuration = builder.Build();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -22,26 +23,28 @@ namespace Festispec_WebApp.Controllers
     {
         private IAccountService _accountService;
         private IMapper _mapper;
-        private readonly IOptions<AppSettings>_appSettings;
+        private readonly AppSettings _appSettings;
  
         public UsersController(IAccountService accountService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _accountService = accountService;
             _mapper = mapper;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
  
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
+            Console.WriteLine(userDto);
             var user = _accountService.Authenticate(userDto.Username, userDto.Password);
- 
+            
+            Debug.WriteLine(userDto.ToString());
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
  
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Value.Secret);
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] 
