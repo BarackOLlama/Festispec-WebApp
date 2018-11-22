@@ -36,10 +36,8 @@ namespace Festispec_WebApp.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
-            Console.WriteLine(userDto);
             var user = _accountService.Authenticate(userDto.Username, userDto.Password);
             
-            Debug.WriteLine(userDto.ToString());
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
  
