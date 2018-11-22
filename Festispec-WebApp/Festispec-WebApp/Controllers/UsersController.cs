@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Festispec_WebApp.DataTransferObjects;
 using Festispec_WebApp.Helpers;
-using Festispec_WebApp.Entities;
+using Festispec_WebApp.Models;
 using Festispec_WebApp.Services;
 
 namespace Festispec_WebApp.Controllers
@@ -20,31 +20,28 @@ namespace Festispec_WebApp.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
+        private IAccountService _accountService;
         private IMapper _mapper;
-        private readonly AppSettings _appSettings;
+        private readonly IOptions<AppSettings>_appSettings;
  
-        public UsersController(
-            IUserService userService,
-            IMapper mapper,
-            IOptions<AppSettings> appSettings)
+        public UsersController(IAccountService accountService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
-            _userService = userService;
+            _accountService = accountService;
             _mapper = mapper;
-            _appSettings = appSettings.Value;
+            _appSettings = appSettings;
         }
  
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
-            var user = _userService.Authenticate(userDto.Username, userDto.Password);
+            var user = _accountService.Authenticate(userDto.Username, userDto.Password);
  
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
  
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_appSettings.Value.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] 
@@ -61,8 +58,6 @@ namespace Festispec_WebApp.Controllers
             return Ok(new {
                 Id = user.Id,
                 Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
                 Token = tokenString
             });
         }
@@ -72,12 +67,12 @@ namespace Festispec_WebApp.Controllers
         public IActionResult Register([FromBody]UserDto userDto)
         {
             // map dto to entity
-            var user = _mapper.Map<User>(userDto);
+            var user = _mapper.Map<Accounts>(userDto);
  
             try
             {
                 // save 
-                _userService.Create(user, userDto.Password);
+                _accountService.Create(user, userDto.Password);
                 return Ok();
             } 
             catch(AppException ex)
@@ -86,19 +81,20 @@ namespace Festispec_WebApp.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
- 
+        [AllowAnonymous]
+
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users =  _userService.GetAll();
+            var users =  _accountService.GetAll();
             var userDtos = _mapper.Map<IList<UserDto>>(users);
             return Ok(userDtos);
         }
- 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var user =  _userService.GetById(id);
+            var user =  _accountService.GetById(id);
             var userDto = _mapper.Map<UserDto>(user);
             return Ok(userDto);
         }
@@ -107,13 +103,13 @@ namespace Festispec_WebApp.Controllers
         public IActionResult Update(int id, [FromBody]UserDto userDto)
         {
             // map dto to entity and set id
-            var user = _mapper.Map<User>(userDto);
+            var user = _mapper.Map<Accounts>(userDto);
             user.Id = id;
  
             try
             {
                 // save 
-                _userService.Update(user, userDto.Password);
+                _accountService.Update(user, userDto.Password);
                 return Ok();
             } 
             catch(AppException ex)
@@ -126,7 +122,7 @@ namespace Festispec_WebApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _userService.Delete(id);
+            _accountService.Delete(id);
             return Ok();
         }
     }

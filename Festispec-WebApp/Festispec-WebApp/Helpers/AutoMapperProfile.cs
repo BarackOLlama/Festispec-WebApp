@@ -1,6 +1,6 @@
 using AutoMapper;
 using Festispec_WebApp.DataTransferObjects;
-using Festispec_WebApp.Entities;
+using Festispec_WebApp.Models;
 
 namespace Festispec_WebApp.Helpers
 {
@@ -8,8 +8,8 @@ namespace Festispec_WebApp.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, UserDto>();
-            CreateMap<UserDto, User>();
+            CreateMap<Accounts, UserDto>();
+            CreateMap<UserDto, Accounts>();
         }
     }
 }
