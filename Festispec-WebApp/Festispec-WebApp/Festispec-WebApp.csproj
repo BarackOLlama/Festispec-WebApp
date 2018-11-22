@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>FestispecWebApp</AssemblyName>
+    <RootNamespace>Festispec_WebApp</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +14,15 @@
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0-preview3-35497" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.0-preview3-35497" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0-preview3-35497" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.0-preview1-final" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.0-preview1-final" />
   </ItemGroup>
 
 </Project>
+<!--<add name="FSDB" connectionString="data source=tcp:berm.database.windows.net,1433;initial catalog=festispec;user id=berm;password=Bart_2018!;MultipleActiveResultSets=True;App=EntityFramework" providerName="System.Data.SqlClient" /> -->
