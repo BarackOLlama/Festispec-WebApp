@@ -21,7 +21,8 @@ function authenticate(item) {
         contentType: "application/json",
         data: JSON.stringify(item),
         success: function (result) {
-            setCookie("jwt_token", result["token"], 7)
+            setCookie("jwt_token", result["token"], 7);
+            window.location.href = 'index.html';
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log("Something went wrong");
