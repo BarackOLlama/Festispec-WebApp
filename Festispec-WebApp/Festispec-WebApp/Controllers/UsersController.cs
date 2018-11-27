@@ -82,6 +82,18 @@ namespace Festispec_WebApp.Controllers
             }
         }
 
+        [HttpGet("VerifyToken")]
+        public IActionResult VerifyToken()
+        {
+            var user = User.Identity;
+            if (user.IsAuthenticated)
+            {
+                return Ok();
+            }
+
+            return Forbid();
+        }
+        
         [HttpGet]
         public IActionResult GetAll()
         {
