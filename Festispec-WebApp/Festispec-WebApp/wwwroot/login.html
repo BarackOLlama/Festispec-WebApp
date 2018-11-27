@@ -17,10 +17,12 @@
                 <h2>Inspecteur Login</h2>
                 <p>Voer uw e-mail adres en wachtwoord in</p>
             </div>
-            <form id="Login">
-
+            
+            <form id="Login" onsubmit="return false" name="Login">
+                <div class="alert alert-danger hide" id="errorAlert" style="display:none;" role="alert">
+                    E-mailadres of wachtwoord incorrect.
+                </div>
                 <div class="form-group">
-
 
                     <input type="email" class="form-control" id="inputEmail" placeholder="E-mailadres">
 
@@ -32,10 +34,9 @@
 
                 </div>
                 <div class="forgot">
-                    <a href="reset.html">Forgot password?</a>
+                    <!--<a href="reset.html">Forgot password?</a>-->
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-
+                <input type="submit" class="btn btn-primary" value="Login">
             </form>
         </div>
         <p class="botto-text">Team BitHopper</p>
@@ -43,8 +44,7 @@
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -52,5 +52,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+<script src="/static/js/cookieHandler.js"></script>
+<script src="/static/js/login.js"></script>
+
 </body>
 </html>
