@@ -84,6 +84,8 @@ namespace Festispec_WebApp
             }
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseMvc();
             Configuration = builder.Build();
         }
