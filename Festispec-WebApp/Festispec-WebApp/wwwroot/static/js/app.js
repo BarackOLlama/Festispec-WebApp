@@ -1,2 +1,2 @@
 document.body.style.display = "none";
-checkIfLoggedIn();
+checkIfLoggedIn(); // jshint ignore:line

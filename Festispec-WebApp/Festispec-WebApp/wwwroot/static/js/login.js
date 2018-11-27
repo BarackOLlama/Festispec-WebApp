@@ -13,7 +13,6 @@ function allowedToLogin() {
 }
 
 function authenticate(item) {
-    console.log(item);
     $.ajax({
         url: uri + "authenticate/",
         type: "POST",
