@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,8 +20,8 @@ namespace Festispec_WebApp.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private IAccountService _accountService;
-        private IMapper _mapper;
+        private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
  
         public UsersController(IAccountService accountService, IMapper mapper, IOptions<AppSettings> appSettings)
@@ -82,7 +81,6 @@ namespace Festispec_WebApp.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-        [AllowAnonymous]
 
         [HttpGet]
         public IActionResult GetAll()

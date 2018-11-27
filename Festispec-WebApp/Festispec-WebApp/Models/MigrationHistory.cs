@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Festispec_WebApp.Models
+﻿namespace Festispec_WebApp.Models
 {
     public partial class MigrationHistory
     {

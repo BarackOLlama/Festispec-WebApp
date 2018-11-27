@@ -1,5 +1,3 @@
-using System;
-
 namespace Festispec_WebApp.DataTransferObjects
 {
     public class UserDto
