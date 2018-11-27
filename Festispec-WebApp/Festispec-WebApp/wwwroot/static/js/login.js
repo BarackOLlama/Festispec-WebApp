@@ -1,6 +1,6 @@
 const uri = "/Users/";
 
-function check() {
+function check(callback) {
     if (getCookie("jwt_token")) {
 
         $.ajax({
@@ -12,17 +12,36 @@ function check() {
                 'Authorization': `Bearer ${getCookie("jwt_token")}`,
             },
             success: function (result) {
-                console.log("I'm logged in!")
+                return callback(true);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log("I'm not logged in?");
+                eraseCookie("jwt_token");
+                return callback(false);
             }
         });
+    } else {
+        return callback(false);
     }
 }
 
+function checkIfLoggedIn() {
+    check(function (bool) {
+        if(!bool) {
+            window.location.href = 'login.html';
+        }
+    });
+
+}
+
+function allowedToLogin() {
+    check(function (bool) {
+        if(bool) {
+            window.location.href = 'index.html';
+        }
+    });
+}
+
 function authenticate(item) {
-    // let form = document.getElementById("Login").value;
     console.log(item);
     $.ajax({
         url: uri + "authenticate/",
