@@ -17,7 +17,7 @@ namespace Festispec_WebApp.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class QuestionnaireController: ControllerBase
     {
         private readonly IQuestionnaireService _questionnaireService;
