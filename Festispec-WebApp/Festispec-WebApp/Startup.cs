@@ -31,6 +31,7 @@ namespace Festispec_WebApp
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IQuestionnaireService, QuestionnaireService>();
+            services.AddScoped<IInspectionService, InspectionService>();
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             

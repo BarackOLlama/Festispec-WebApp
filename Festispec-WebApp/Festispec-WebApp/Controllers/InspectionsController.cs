@@ -10,25 +10,25 @@ namespace Festispec_WebApp.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class QuestionnaireController: ControllerBase
+    public class InspectionsController: ControllerBase
     {
-        private readonly IQuestionnaireService _questionnaireService;
+        private readonly IInspectionService _inspectionService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
         
-        public QuestionnaireController(IQuestionnaireService questionnaireService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public InspectionsController(IInspectionService inspectionService, IMapper mapper, IOptions<AppSettings> appSettings)
         {
-            _questionnaireService = questionnaireService;
+            _inspectionService = inspectionService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
         }
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult GetQuestionnaires()
+        public IActionResult GetInspections()
         {
-            var questionnaires = _questionnaireService.GetAll();
+            var inspections = _inspectionService.GetAll();
 
-            return Ok(questionnaires);
+            return Ok(inspections);
         }
 
     }
