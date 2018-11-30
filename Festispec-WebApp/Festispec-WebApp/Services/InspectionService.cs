@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using Festispec_WebApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Festispec_WebApp.Services
 {
@@ -19,7 +21,11 @@ namespace Festispec_WebApp.Services
         }
         public IEnumerable<Inspections> GetAll()
         {
-            return _context.Inspections;
+            //var ins1 = _context.Inspections;
+            var ins = _context.Inspections
+                .Include(nameof(Inspections.InspectionInspectors))
+                .ToList();
+            return ins;
         }
 
         public Inspections GetById(int id)
