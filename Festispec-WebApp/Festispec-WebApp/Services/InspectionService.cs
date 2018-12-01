@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Festispec_WebApp.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Festispec_WebApp.Services
@@ -11,7 +13,8 @@ namespace Festispec_WebApp.Services
         Inspections GetById(int id);
         Inspections GetByAccountId(int id);
     }
-    public class InspectionService: IInspectionService
+
+    public class InspectionService : IInspectionService
     {
         private readonly FSContext _context;
 
@@ -19,11 +22,17 @@ namespace Festispec_WebApp.Services
         {
             _context = fsContext;
         }
+
         public IEnumerable<Inspections> GetAll()
         {
-            //var ins1 = _context.Inspections;
             var ins = _context.Inspections
-                .Include(nameof(Inspections.InspectionInspectors))
+                .Include(inspections => inspections.InspectionInspectors)
+                .ThenInclude(inspectors => inspectors.Inspector)
+                .Include(inspections => inspections.Event)
+                .Include(inspections => inspections.Status)
+//                .Include(inspections => inspections.InspectionDates)
+                .Include(inspections => inspections.Questionnaires)
+                .Include(inspections => inspections.Quotations)
                 .ToList();
             return ins;
         }
