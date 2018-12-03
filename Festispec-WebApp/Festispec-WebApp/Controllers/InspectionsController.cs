@@ -30,6 +30,13 @@ namespace Festispec_WebApp.Controllers
 
             return Ok(inspections);
         }
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public IActionResult GetInspectionById(int id)
+        {
+            var inspection = _inspectionService.GetById(id);
+            return Ok(inspection);
+        }
 
     }
     

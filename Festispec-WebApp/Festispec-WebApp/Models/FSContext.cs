@@ -135,19 +135,10 @@ namespace Festispec_WebApp.Models
 
             modelBuilder.Entity<InspectionDates>(entity =>
             {
-                entity.HasIndex(e => e.InspectionId)
-                    .HasName("IX_Inspection_Id");
-
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
-
-                entity.Property(e => e.InspectionId).HasColumnName("Inspection_Id");
 
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Inspection)
-                    .WithMany(p => p.InspectionDates)
-                    .HasForeignKey(d => d.InspectionId)
-                    .HasConstraintName("FK_dbo.InspectionDates_dbo.Inspections_Inspection_Id");
             });
 
             modelBuilder.Entity<InspectionInspectors>(entity =>
@@ -184,6 +175,9 @@ namespace Festispec_WebApp.Models
                 entity.HasIndex(e => e.StatusId)
                     .HasName("IX_StatusId");
 
+//                entity.HasIndex(e => e.InspectionDates)
+//                    .HasName("IX_DateId");
+
                 entity.HasOne(d => d.Event)
                     .WithMany(p => p.Inspections)
                     .HasForeignKey(d => d.EventId)
@@ -193,6 +187,8 @@ namespace Festispec_WebApp.Models
                     .WithMany(p => p.Inspections)
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("FK_dbo.Inspections_dbo.Status_StatusId");
+
+                entity.HasMany(a => a.InspectionDates);
             });
 
             modelBuilder.Entity<Inspectors>(entity =>

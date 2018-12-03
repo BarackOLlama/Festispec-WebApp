@@ -39,7 +39,15 @@ namespace Festispec_WebApp.Services
 
         public Inspections GetById(int id)
         {
-            throw new System.NotImplementedException();
+            var inspection = _context.Inspections.Include(inspections => inspections.InspectionInspectors)
+                .ThenInclude(inspectors => inspectors.Inspector)
+                .Include(inspections => inspections.InspectionDates)
+                .Include(inspections => inspections.Event)
+                .Include(inspections => inspections.Status)
+//                .Include(inspections => inspections.InspectionDates)
+                .Include(inspections => inspections.Questionnaires)
+                .Include(inspections => inspections.Quotations).ToList().FirstOrDefault(i => i.Id == id);
+            return inspection;
         }
 
         public Inspections GetByAccountId(int id)
