@@ -12,6 +12,8 @@ namespace Festispec_WebApp.Services
         IEnumerable<Inspections> GetAll();
         Inspections GetById(int id);
         Inspections GetByAccountId(int id);
+        
+        IEnumerable<InspectionDates> Test();
     }
 
     public class InspectionService : IInspectionService
@@ -50,6 +52,11 @@ namespace Festispec_WebApp.Services
             return inspection;
         }
 
+        public IEnumerable<InspectionDates> Test()
+        {
+            var dats = _context.InspectionDates.ToList();
+            return dats;
+        }
         public Inspections GetByAccountId(int id)
         {
             throw new System.NotImplementedException();

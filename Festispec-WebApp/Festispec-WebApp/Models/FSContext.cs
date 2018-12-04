@@ -37,14 +37,15 @@ namespace Festispec_WebApp.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=tcp:berm.database.windows.net,1433;Initial Catalog=festispec;Persist Security Info=False;User ID=berm;Password=Bart_2018!;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer(
+                    "Server=tcp:berm.database.windows.net,1433;Initial Catalog=festispec;Persist Security Info=False;User ID=berm;Password=Bart_2018!;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-preview3-35497");
-            modelBuilder.Entity<InspectionInspectors>().HasKey(sc => new { sc.InspectorId, sc.InspectionId });
+            modelBuilder.Entity<InspectionInspectors>().HasKey(sc => new {sc.InspectorId, sc.InspectionId});
 
             modelBuilder.Entity<Accounts>(entity =>
             {
@@ -138,12 +139,11 @@ namespace Festispec_WebApp.Models
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
-
             });
 
             modelBuilder.Entity<InspectionInspectors>(entity =>
             {
-                entity.HasKey(e => new { e.InspectionId, e.InspectorId })
+                entity.HasKey(e => new {e.InspectionId, e.InspectorId})
                     .HasName("PK_dbo.InspectionInspectors");
 
                 entity.HasIndex(e => e.InspectionId)
@@ -155,7 +155,7 @@ namespace Festispec_WebApp.Models
                 entity.Property(e => e.InspectionId).HasColumnName("Inspection_Id");
 
                 entity.Property(e => e.InspectorId).HasColumnName("Inspector_Id");
-               
+
                 entity.HasOne(d => d.Inspection)
                     .WithMany(p => p.InspectionInspectors)
                     .HasForeignKey(d => d.InspectionId)
@@ -188,7 +188,10 @@ namespace Festispec_WebApp.Models
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("FK_dbo.Inspections_dbo.Status_StatusId");
 
-                entity.HasMany(a => a.InspectionDates);
+                entity.HasOne(
+                    a =>
+                        a.InspectionDates
+                );
             });
 
             modelBuilder.Entity<Inspectors>(entity =>
@@ -208,7 +211,7 @@ namespace Festispec_WebApp.Models
 
             modelBuilder.Entity<MigrationHistory>(entity =>
             {
-                entity.HasKey(e => new { e.MigrationId, e.ContextKey })
+                entity.HasKey(e => new {e.MigrationId, e.ContextKey})
                     .HasName("PK_dbo.__MigrationHistory");
 
                 entity.ToTable("__MigrationHistory");
