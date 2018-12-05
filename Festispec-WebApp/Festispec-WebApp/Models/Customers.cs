@@ -14,12 +14,12 @@ namespace Festispec_WebApp.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Adres { get; set; }
         public string City { get; set; }
         public string ZipCode { get; set; }
         public DateTime? StartingDate { get; set; }
-        public short? ChamberOfCommerceNumber { get; set; }
+        public decimal? ChamberOfCommerceNumber { get; set; }
         public bool IsDeleted { get; set; }
+        public string Address { get; set; }
 
         public virtual ICollection<Contacts> Contacts { get; set; }
         public virtual ICollection<Events> Events { get; set; }

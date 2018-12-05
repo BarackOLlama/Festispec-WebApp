@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Festispec_WebApp.Models
 {
@@ -6,7 +7,6 @@ namespace Festispec_WebApp.Models
     {
         public Events()
         {
-            EventDates = new HashSet<EventDates>();
             Inspections = new HashSet<Inspections>();
         }
 
@@ -14,11 +14,13 @@ namespace Festispec_WebApp.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
+        public string Zipcode { get; set; }
         public int? CustomerId { get; set; }
         public bool IsDeleted { get; set; }
+        public int? EventDateId { get; set; }
 
         public virtual Customers Customer { get; set; }
-        public virtual ICollection<EventDates> EventDates { get; set; }
+        public virtual EventDates EventDate { get; set; }
         public virtual ICollection<Inspections> Inspections { get; set; }
     }
 }

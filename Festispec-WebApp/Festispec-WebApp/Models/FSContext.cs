@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Festispec_WebApp.Models
 {
@@ -37,15 +39,13 @@ namespace Festispec_WebApp.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(
-                    "Server=tcp:berm.database.windows.net,1433;Initial Catalog=festispec;Persist Security Info=False;User ID=berm;Password=Bart_2018!;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer("Server=tcp:berm.database.windows.net,1433;Initial Catalog=festispec;Persist Security Info=False;User ID=berm;Password=Bart_2018!;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-preview3-35497");
-            modelBuilder.Entity<InspectionInspectors>().HasKey(sc => new {sc.InspectorId, sc.InspectionId});
 
             modelBuilder.Entity<Accounts>(entity =>
             {
@@ -103,24 +103,16 @@ namespace Festispec_WebApp.Models
 
             modelBuilder.Entity<Customers>(entity =>
             {
+                entity.Property(e => e.ChamberOfCommerceNumber).HasColumnType("decimal(8, 0)");
+
                 entity.Property(e => e.StartingDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<EventDates>(entity =>
             {
-                entity.HasIndex(e => e.EventId)
-                    .HasName("IX_Event_Id");
-
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
-                entity.Property(e => e.EventId).HasColumnName("Event_Id");
-
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Event)
-                    .WithMany(p => p.EventDates)
-                    .HasForeignKey(d => d.EventId)
-                    .HasConstraintName("FK_dbo.EventDates_dbo.Events_Event_Id");
             });
 
             modelBuilder.Entity<Events>(entity =>
@@ -128,10 +120,18 @@ namespace Festispec_WebApp.Models
                 entity.HasIndex(e => e.CustomerId)
                     .HasName("IX_CustomerId");
 
+                entity.HasIndex(e => e.EventDateId)
+                    .HasName("IX_EventDateId");
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Events)
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("FK_dbo.Events_dbo.Customers_CustomerId");
+
+                entity.HasOne(d => d.EventDate)
+                    .WithMany(p => p.Events)
+                    .HasForeignKey(d => d.EventDateId)
+                    .HasConstraintName("FK_dbo.Events_dbo.EventDates_EventDateId");
             });
 
             modelBuilder.Entity<InspectionDates>(entity =>
@@ -143,7 +143,7 @@ namespace Festispec_WebApp.Models
 
             modelBuilder.Entity<InspectionInspectors>(entity =>
             {
-                entity.HasKey(e => new {e.InspectionId, e.InspectorId})
+                entity.HasKey(e => new { e.InspectionId, e.InspectorId })
                     .HasName("PK_dbo.InspectionInspectors");
 
                 entity.HasIndex(e => e.InspectionId)
@@ -172,26 +172,26 @@ namespace Festispec_WebApp.Models
                 entity.HasIndex(e => e.EventId)
                     .HasName("IX_EventId");
 
+                entity.HasIndex(e => e.InspectionDateId)
+                    .HasName("IX_InspectionDateId");
+
                 entity.HasIndex(e => e.StatusId)
                     .HasName("IX_StatusId");
-
-//                entity.HasIndex(e => e.InspectionDates)
-//                    .HasName("IX_DateId");
 
                 entity.HasOne(d => d.Event)
                     .WithMany(p => p.Inspections)
                     .HasForeignKey(d => d.EventId)
                     .HasConstraintName("FK_dbo.Inspections_dbo.Events_EventId");
 
+                entity.HasOne(d => d.InspectionDate)
+                    .WithMany(p => p.Inspections)
+                    .HasForeignKey(d => d.InspectionDateId)
+                    .HasConstraintName("FK_dbo.Inspections_dbo.InspectionDates_InspectionDateId");
+
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Inspections)
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("FK_dbo.Inspections_dbo.Status_StatusId");
-
-                entity.HasOne(
-                    a =>
-                        a.InspectionDates
-                );
             });
 
             modelBuilder.Entity<Inspectors>(entity =>
@@ -211,7 +211,7 @@ namespace Festispec_WebApp.Models
 
             modelBuilder.Entity<MigrationHistory>(entity =>
             {
-                entity.HasKey(e => new {e.MigrationId, e.ContextKey})
+                entity.HasKey(e => new { e.MigrationId, e.ContextKey })
                     .HasName("PK_dbo.__MigrationHistory");
 
                 entity.ToTable("__MigrationHistory");

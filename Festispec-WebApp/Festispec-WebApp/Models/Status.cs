@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Festispec_WebApp.Models
 {
@@ -12,7 +12,7 @@ namespace Festispec_WebApp.Models
 
         public int Id { get; set; }
         public string StatusName { get; set; }
-        [JsonIgnore]
+
         public virtual ICollection<Inspections> Inspections { get; set; }
     }
 }

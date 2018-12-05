@@ -32,7 +32,7 @@ namespace Festispec_WebApp.Services
                 .ThenInclude(inspectors => inspectors.Inspector)
                 .Include(inspections => inspections.Event)
                 .Include(inspections => inspections.Status)
-//                .Include(inspections => inspections.InspectionDates)
+                .Include(inspections => inspections.InspectionDate)
                 .Include(inspections => inspections.Questionnaires)
                 .Include(inspections => inspections.Quotations)
                 .ToList();
@@ -43,10 +43,9 @@ namespace Festispec_WebApp.Services
         {
             var inspection = _context.Inspections.Include(inspections => inspections.InspectionInspectors)
                 .ThenInclude(inspectors => inspectors.Inspector)
-                .Include(inspections => inspections.InspectionDates)
                 .Include(inspections => inspections.Event)
                 .Include(inspections => inspections.Status)
-//                .Include(inspections => inspections.InspectionDates)
+                .Include(inspections => inspections.InspectionDate)
                 .Include(inspections => inspections.Questionnaires)
                 .Include(inspections => inspections.Quotations).ToList().FirstOrDefault(i => i.Id == id);
             return inspection;
