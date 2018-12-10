@@ -12,7 +12,7 @@ namespace Festispec_WebApp.Services
         IEnumerable<Inspections> GetAll();
         Inspections GetById(int id);
         Inspections GetByAccountId(int id);
-        
+        IEnumerable<Inspections> testDing(int inspector_id);
         IEnumerable<InspectionDates> Test();
     }
 
@@ -51,6 +51,16 @@ namespace Festispec_WebApp.Services
             return inspection;
         }
 
+        public IEnumerable<Inspections> testDing(int inspector_id=817)
+        {
+            var inspections = _context.InspectionInspectors
+                .Include(a => a.Inspection.InspectionDate)
+                .Include(a => a.Inspection.Event)
+                .Where(a => a.InspectorId == inspector_id)
+                .Select(a => a.Inspection);
+            return inspections;
+        }
+        
         public IEnumerable<InspectionDates> Test()
         {
             var dats = _context.InspectionDates.ToList();

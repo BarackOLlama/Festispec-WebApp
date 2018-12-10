@@ -44,6 +44,15 @@ namespace Festispec_WebApp.Controllers
             var isd  = _inspectionService.Test();
             return Ok(isd);
         }
+        
+        
+        [AllowAnonymous]
+        [HttpGet("test/{id}")]
+        public IActionResult GetInspectionByInspectorId(int id)
+        {
+            var inspection = _inspectionService.testDing(id);
+            return Ok(inspection);
+        }
 
     }
     
