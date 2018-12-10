@@ -46,6 +46,7 @@ namespace Festispec_WebApp.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-preview3-35497");
+            modelBuilder.Entity<InspectionInspectors>().HasKey(x => new { x.InspectorId, x.InspectionId });
 
             modelBuilder.Entity<Accounts>(entity =>
             {

@@ -93,7 +93,8 @@ namespace Festispec_WebApp.Controllers
 
             return Forbid();
         }
-        
+        [AllowAnonymous]
+
         [HttpGet]
         public IActionResult GetAll()
         {

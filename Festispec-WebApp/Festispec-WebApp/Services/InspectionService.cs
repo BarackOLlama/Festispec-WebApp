@@ -12,7 +12,7 @@ namespace Festispec_WebApp.Services
         IEnumerable<Inspections> GetAll();
         Inspections GetById(int id);
         Inspections GetByAccountId(int id);
-        
+        IEnumerable<Inspections> GetInspectionsByInspectorId(int inspectorId);
         IEnumerable<InspectionDates> Test();
     }
 
@@ -51,6 +51,36 @@ namespace Festispec_WebApp.Services
             return inspection;
         }
 
+        private IEnumerable<int> GetInspectionIdsByInspectorId(int inspectorId)
+        {
+            var inspections = _context.InspectionInspectors
+                .Include(a => a.Inspection.InspectionDate)
+                .Include(a => a.Inspection.Event)
+                .Where(a => a.InspectorId == inspectorId)
+                .Select(a => a.Inspection.Id);
+            return inspections;
+        }
+        
+
+        public IEnumerable<Inspections> GetInspectionsByInspectorId(int inspectorId)
+        {
+            IEnumerable <int> idList = GetInspectionIdsByInspectorId(inspectorId);
+            var list = idList.ToList();
+            if (!list.Any())
+            {
+                return null;
+            }
+            var inspection = _context.Inspections.Include(inspections => inspections.InspectionInspectors)
+                .ThenInclude(inspectors => inspectors.Inspector)
+                .Include(inspections => inspections.Event)
+                .Include(inspections => inspections.Status)
+                .Include(inspections => inspections.InspectionDate)
+                .Include(inspections => inspections.Questionnaires)
+                .Include(inspections => inspections.Quotations)
+                .Where(a => list.Contains(a.Id));
+            return inspection;
+        }
+        
         public IEnumerable<InspectionDates> Test()
         {
             var dats = _context.InspectionDates.ToList();
