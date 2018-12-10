@@ -77,7 +77,8 @@ namespace Festispec_WebApp.Services
                 .Include(inspections => inspections.InspectionDate)
                 .Include(inspections => inspections.Questionnaires)
                 .Include(inspections => inspections.Quotations)
-                .Where(a => list.Contains(a.Id));
+                .Where(a => list.Contains(a.Id))
+                .ToList();
             return inspection;
         }
         
