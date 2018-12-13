@@ -81,14 +81,17 @@ namespace Festispec_WebApp.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
+        
+        /**
+         * Per MS defined clams Name is in this context USER ID!
+         */
         [HttpGet("VerifyToken")]
         public IActionResult VerifyToken()
         {
             var user = User.Identity;
             if (user.IsAuthenticated)
             {
-                return Ok();
+                return Ok(user.Name);
             }
 
             return Forbid();

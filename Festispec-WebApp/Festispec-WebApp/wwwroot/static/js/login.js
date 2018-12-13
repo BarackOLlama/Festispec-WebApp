@@ -3,7 +3,7 @@ document.body.style.display = "none";
 allowedToLogin();
 
 function allowedToLogin() {
-    check(function (bool) {
+    checkJWT(function (bool) {
         if(bool) {
             window.location.href = 'index.html';
         } else {
@@ -21,6 +21,7 @@ function authenticate(item) {
         data: JSON.stringify(item),
         success: function (result) {
             setCookie("jwt_token", result["token"], 7);
+            setCookie("user_id", result["id"], 7);
             window.location.href = 'index.html';
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

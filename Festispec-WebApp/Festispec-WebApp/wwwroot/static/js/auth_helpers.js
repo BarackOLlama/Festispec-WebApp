@@ -1,6 +1,6 @@
 const uri = "/Users/";
 
-function check(callback) {
+function checkJWT(callback) {
     if (getCookie("jwt_token")) {
 
         $.ajax({
@@ -16,6 +16,7 @@ function check(callback) {
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 eraseCookie("jwt_token");
+                eraseCookie("user_id");
                 return callback(false);
             }
         });
