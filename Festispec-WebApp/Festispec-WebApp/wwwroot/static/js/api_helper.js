@@ -1,6 +1,7 @@
 class WebApp {
     /**
      * Should have all the classes and instances
+     * Adds Auth header
      * @param currentInspectorId
      */
     constructor(currentInspectorId = null) {
@@ -27,7 +28,7 @@ class WebApp {
         this._CurrentInspectorId = value;
     }
 
-    getInspectors(cb) {
+    getInspectors(callBack) {
         /**
          * Sends get request to target, receives response
          *
@@ -37,12 +38,62 @@ class WebApp {
          */
         $.ajax({
             type: 'GET',
-            url: '/api/Inspections/',
+            url: '/Users/',
             success: function (data) {
-                return cb(data);
+                return callBack(data);
             }
         });
-
+    }
+    
+    getAllInspections(callBack) {
+        /**
+         * Sends get request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        $.ajax({
+            type: 'GET',
+            url: '/api/inspections/',
+            success: function (data) {
+                return callBack(data);
+            }
+        });
+    }
+    
+    getInspections(callBack) {
+        /**
+         * Sends get request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        let id = this.CurrentInspectorId;
+        $.ajax({
+            type: 'GET',
+            url: `/api/Inspections/inspector/${id}`,
+            success: function (data) {
+                return callBack(data);
+            }
+        });
+    }
+    getInspection(InspectionId, callBack) {
+        /**
+         * Sends get request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        $.ajax({
+            type: 'GET',
+            url: `/api/Inspections/${id}`,
+            success: function (data) {
+                return callBack(data);
+            }
+        });
     }
 }
 

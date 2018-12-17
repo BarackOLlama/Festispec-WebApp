@@ -1,4 +1,5 @@
 using AutoMapper;
+using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -47,10 +48,14 @@ namespace Festispec_WebApp.Controllers
         
         
         [AllowAnonymous]
-        [HttpGet("test/{id}")]
+        [HttpGet("inspector/{id}")]
         public IActionResult GetInspectionByInspectorId(int id)
         {
             var inspection = _inspectionService.GetInspectionsByInspectorId(id);
+            if (inspection.IsNullOrEmpty())
+            {
+                return NoContent();
+            }
             return Ok(inspection);
         }
 
