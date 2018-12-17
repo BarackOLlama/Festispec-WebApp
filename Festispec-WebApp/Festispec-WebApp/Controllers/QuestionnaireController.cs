@@ -31,6 +31,14 @@ namespace Festispec_WebApp.Controllers
             return Ok(questionnaires);
         }
         
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public IActionResult GetQuestionnaire(int id)
+        {
+            var questionnaire = _questionnaireService.GetById(id);
+            return Ok(questionnaire);
+        }
+        
         
     }
     

@@ -106,7 +106,7 @@ class WebApp {
          */
         $.ajax({
             type: 'GET',
-            url: `/api/Inspections/${id}`,
+            url: `/api/Questionnaire/${id}`,
             success: function (data) {
                 return callBack(data);
             }
