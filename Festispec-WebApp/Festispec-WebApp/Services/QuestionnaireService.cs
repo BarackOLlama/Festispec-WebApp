@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Festispec_WebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,8 +8,8 @@ namespace Festispec_WebApp.Services
     public interface IQuestionnaireService
     {
         IEnumerable<Questionnaires> GetAll();
-        Questionnaires GetById(int id);
-        Questionnaires GetByAccountId(int id);
+        Questionnaires GetById(int questionnaireId);
+        IEnumerable<Questionnaires> GetByAccountId(int id);
     }
 
     public class QuestionnaireService : IQuestionnaireService
@@ -27,12 +28,14 @@ namespace Festispec_WebApp.Services
                 .Include(questionnaire => questionnaire.Questions).ThenInclude(a => a.Answers);
         }
 
-        public Questionnaires GetById(int id)
+        public Questionnaires GetById(int questionnaireId)
         {
-            throw new System.NotImplementedException();
+            return _context.Questionnaires.Include(questionnaire => questionnaire.Questions)
+                .ThenInclude(a => a.QuestionType).Include(questionnaire => questionnaire.Questions)
+                .ThenInclude(a => a.Answers).FirstOrDefault(c => c.Id == questionnaireId);
         }
 
-        public Questionnaires GetByAccountId(int id)
+        public IEnumerable<Questionnaires> GetByAccountId(int id)
         {
             throw new System.NotImplementedException();
         }
