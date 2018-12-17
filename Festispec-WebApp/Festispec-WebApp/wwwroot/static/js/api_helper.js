@@ -13,7 +13,7 @@ class WebApp {
         this._CurrentInspectorId = currentInspectorId;
         $.ajaxSetup({
             headers: {
-                'Authorization': $.cookie('jwt_token')
+                'Authorization': getCookie('jwt_token')
             }
         })
 
@@ -27,7 +27,7 @@ class WebApp {
         this._CurrentInspectorId = value;
     }
 
-    getInspectors() {
+    getInspectors(cb) {
         /**
          * Sends get request to target, receives response
          *
@@ -39,11 +39,10 @@ class WebApp {
             type: 'GET',
             url: '/api/Inspections/',
             success: function (data) {
-                console.log(data)
+                return cb(data);
             }
         });
 
     }
 }
 
-let webApp = new WebApp(1);

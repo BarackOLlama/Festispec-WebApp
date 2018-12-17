@@ -5,12 +5,14 @@
     <title>Test</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
 </head>
 <!--Display should always be none for pages where auth is required (for beauty purposes, NOT for security)-->
 <body style="display: none">
 
 <nav class="navbar navbar-light bg-light">
-    <button class="pull-left navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="pull-left navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <nav class="navbar navbar-light bg-light">
@@ -39,6 +41,12 @@
     </ul>
 </nav>
 
+<center>
+    <ul id="test_cj">
+    </ul>
+
+</center>
+
 
 <h1>test</h1>
 
@@ -57,5 +65,17 @@
 <script src="/static/js/auth_helpers.js"></script>
 <script src="/static/js/auth.js"></script>
 <script src="/static/js/app.js"></script>
+<script src="/static/js/api_helper.js"></script>
+<script src="/static/js/views/index.js"></script>
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+        // For every page a new javascript view (js/views/index.js at the moment)
+        // init the class
+        let page = new index();
+        // Run method to modify this page with the data retrieved from the API
+        page.load_inspection_data();
+    });
+</script>
