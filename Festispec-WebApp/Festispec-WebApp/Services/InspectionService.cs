@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Festispec_WebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,10 +59,19 @@ namespace Festispec_WebApp.Services
                 .Select(a => a.Inspection.Id);
             return inspections;
         }
-        
 
+        private int GetInspectorIdBasedOnAccountId(int accountId)
+        {
+            var inspector = _context.Inspectors
+                .Where(a => a.Account.Id == accountId)
+                .Select(i => i.Id).FirstOrDefault();
+
+            return inspector;
+        }
         public IEnumerable<Inspections> GetInspectionsByInspectorId(int inspectorId)
         {
+            inspectorId = GetInspectorIdBasedOnAccountId(inspectorId);
+            
             IEnumerable <int> idList = GetInspectionIdsByInspectorId(inspectorId);
             var list = idList.ToList();
             if (!list.Any())
