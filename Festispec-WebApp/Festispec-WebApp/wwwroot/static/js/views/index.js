@@ -20,7 +20,7 @@ class index {
                         $('<li>').append(
                             // Call the current list index (The list contains objects, in this case 2 inspector objects)
                             // So we need to for through the list (which we do above, in the for loop), and call the object attribute (or object functions, lists etc)
-                            inspectorData[index].username
+                            inspectorData[index].name
                         )
                     )
                 }
