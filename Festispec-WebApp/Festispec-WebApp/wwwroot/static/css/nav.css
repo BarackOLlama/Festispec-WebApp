@@ -1,0 +1,126 @@
+﻿/* navigation bar */
+.topnav {
+    position: fixed;
+    left: 0px;
+    width: 100%;
+    border-bottom: 8px solid black;
+    height: 150px;
+    z-index: 10;
+    background: #222;
+    display: flex;
+}
+
+.navlogo {
+    width: 33%;
+    text-align: center;
+    padding-left: 25px;
+    color:white;
+}
+
+    .navlogo img {
+        height: 110px;
+        padding-top: 15px;
+    }
+
+/* THE NAV DROPDOWNLIST BEGINS HERE */
+
+.button {
+    width: 33%;
+}
+
+
+
+
+    .button ul li {
+        list-style: none;
+        float: left;
+        position: relative;
+    }
+
+        .button ul li a {
+            display: block;
+            padding: 21px 14px;
+            font-family: arial;
+            color: white;
+            text-decoration: none;
+            font-size: 50px;
+            padding-top: 30px;
+            width: 100%;
+        }
+
+        .button ul li ul {
+            display: none;
+            position: fixed;
+            left: 0px;
+            padding: 10px;
+            margin-top: 26px;
+            background-color: #fff;
+            width: 100%;
+        }
+
+        .button ul li ul {
+            display: block;
+        }
+
+        .button ul li ul li {
+            clear: both;
+            width: 100%;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+            .button ul li ul li a {
+                display: block;
+                padding: 11px 10px;
+                font-family: arial;
+                color: #222;
+                text-decoration: none;
+            }
+
+            .button ul li ul li {
+                background-color: #eee;
+                width: 100%;
+            }
+
+/*  NAV DROPDOWNLIST ENDS HERE */
+
+@media (max-width: 700px) {
+    div.sociallinksbox {
+        display: none;
+    }
+}
+
+
+.sociallinksbox {
+    padding-top: 15px;
+    width: 33%;
+    margin-right: 20px;
+}
+
+.sociallinks {
+    display: flex;
+    list-style: none;
+    letter-spacing: 3px;
+    font-size: 50px;
+    margin-top: 40px;
+    float: right;
+    /* CHANGE PADDING LEFT TO SOMETHING ADAPTIVE */
+}
+
+
+
+.fa1 {
+    color: #0084b4;
+}
+
+.fa2 {
+    color: #3b5998;
+}
+
+.fa3 {
+    color: yellow;
+}
+
+.fa4 {
+    color: grey;
+}
