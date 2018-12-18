@@ -10,6 +10,7 @@ namespace Festispec_WebApp.Services
         IEnumerable<Questionnaires> GetAll();
         Questionnaires GetById(int questionnaireId);
         IEnumerable<Questionnaires> GetByAccountId(int id);
+        Questionnaires GetByInspection(int inspectionId);
     }
 
     public class QuestionnaireService : IQuestionnaireService
@@ -38,6 +39,13 @@ namespace Festispec_WebApp.Services
         public IEnumerable<Questionnaires> GetByAccountId(int id)
         {
             throw new System.NotImplementedException();
+        }
+
+        public Questionnaires GetByInspection(int inspectionId)
+        {
+            return _context.Questionnaires.Include(questionnaire => questionnaire.Questions)
+                .ThenInclude(a => a.QuestionType).Include(questionnaire => questionnaire.Questions)
+                .ThenInclude(a => a.Answers).FirstOrDefault(c => c.InspectionId == inspectionId);
         }
     }
 }
