@@ -1,9 +1,9 @@
-class index {
+class Index {
     constructor() {
         this.WebApp = new WebApp();
     }
 
-    load_inspection_data() {
+    render_inspection_data() {
         // Select UL element created in the HTML based on ID. Keep the ID unique for every <ul>!
         let target_ul = $('#test_cj');
         // Run function from api_helper, retrieving the data for this inspector.
@@ -18,16 +18,39 @@ class index {
                     target_ul.append(
                         // Add <li> to ul (list element)
                         $('<li>').append(
-                            // Call the current list index (The list contains objects, in this case 2 inspector objects)
-                            // So we need to for through the list (which we do above, in the for loop), and call the object attribute (or object functions, lists etc)
-                            inspectorData[index].name
+                            $('<ul>').append(
+                                // Call the current list index (The list contains objects, in this case 2 inspector objects)
+                                // So we need to for through the list (which we do above, in the for loop), and call the object attribute (or object functions, lists etc)
+                                $('<li>').append(
+                                    inspectorData[index].id
+                                ),
+                                $('<li>').append(
+                                    inspectorData[index].name
+                                )
+                            )
                         )
                     )
                 }
             } else {
                 // write no inspection in ul
+                target_ul.append(
+                    // Add <li> to ul (list element)
+                    $('<li>').append(
+                        // Call the current list index (The list contains objects, in this case 2 inspector objects)
+                        // So we need to for through the list (which we do above, in the for loop), and call the object attribute (or object functions, lists etc)
+                        "No inspection data."
+                    )
+                )
             }
-        
+
         })
     }
 }
+
+$(document).ready(function () {
+    // For every page a new javascript view (js/views/index.js at the moment)
+    // init the class
+    let page = new Index();
+    // Run method to modify this page with the data retrieved from the API
+    page.render_inspection_data();
+});

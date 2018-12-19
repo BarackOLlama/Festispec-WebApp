@@ -75,6 +75,7 @@ class WebApp {
             type: 'GET',
             url: `/api/Inspections/inspector/${id}`,
             success: function (data) {
+                console.log(data);
                 return callBack(data);
             }
         });
@@ -90,6 +91,39 @@ class WebApp {
         $.ajax({
             type: 'GET',
             url: `/api/Inspections/${id}`,
+            success: function (data) {
+                return callBack(data);
+            }
+        });
+    }
+    
+    getQuestionnaire(QuestionnaireId, callBack) {
+        /**
+         * Sends get request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        $.ajax({
+            type: 'GET',
+            url: `/api/Questionnaire/${id}`,
+            success: function (data) {
+                return callBack(data);
+            }
+        });
+    }
+    getQuestionnaireByInspection(InspectionId, callBack) {
+        /**
+         * Sends get request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        $.ajax({
+            type: 'GET',
+            url: `/api/Questionnaire/inspection/${InspectionId}`,
             success: function (data) {
                 return callBack(data);
             }
