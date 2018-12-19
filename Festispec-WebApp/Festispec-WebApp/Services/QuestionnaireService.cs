@@ -15,7 +15,7 @@ namespace Festispec_WebApp.Services
 
     public class QuestionnaireService : IQuestionnaireService
     {
-        private FSContext _context;
+        private readonly FSContext _context;
 
         public QuestionnaireService(FSContext fsContext)
         {
@@ -43,9 +43,10 @@ namespace Festispec_WebApp.Services
 
         public Questionnaires GetByInspection(int inspectionId)
         {
-            return _context.Questionnaires.Include(questionnaire => questionnaire.Questions)
-                .ThenInclude(a => a.QuestionType).Include(questionnaire => questionnaire.Questions)
-                .ThenInclude(a => a.Answers).FirstOrDefault(c => c.InspectionId == inspectionId);
+            return _context.Questionnaires
+                .Include(questionnaire => questionnaire.Questions).ThenInclude(a => a.QuestionType)
+                .Include(questionnaire => questionnaire.Questions).ThenInclude(a => a.Answers)
+                .FirstOrDefault(c => c.InspectionId == 1114);
         }
     }
 }

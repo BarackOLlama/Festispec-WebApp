@@ -41,10 +41,10 @@ namespace Festispec_WebApp.Controllers
             return Ok(questionnaire);
         }
         [AllowAnonymous]
-        [HttpGet("inspection/{id}")]
+        [HttpGet("inspection/{inspectionId}")]
         public IActionResult GetQuestionnaireByInspection(int inspectionId)
         {
-            var questionnaire = _questionnaireService.GetById(inspectionId);
+            var questionnaire = _questionnaireService.GetByInspection(inspectionId);
             return Ok(questionnaire);
         }
     }

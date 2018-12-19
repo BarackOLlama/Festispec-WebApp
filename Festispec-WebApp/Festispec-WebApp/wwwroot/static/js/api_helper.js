@@ -75,6 +75,7 @@ class WebApp {
             type: 'GET',
             url: `/api/Inspections/inspector/${id}`,
             success: function (data) {
+                console.log(data);
                 return callBack(data);
             }
         });
@@ -122,7 +123,7 @@ class WebApp {
          */
         $.ajax({
             type: 'GET',
-            url: `/api/Questionnaire/inspection/${id}`,
+            url: `/api/Questionnaire/inspection/${InspectionId}`,
             success: function (data) {
                 return callBack(data);
             }
