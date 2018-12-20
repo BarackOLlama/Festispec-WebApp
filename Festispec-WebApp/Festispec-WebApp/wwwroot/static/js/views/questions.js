@@ -25,7 +25,7 @@ class Question {
     }
 
     static _build_internal_ul(question) {
-        return $(`<ul id=${question.id}>`)
+        return $(`<ul style="list-style: none" id=${question.id}>`)
             .append(
                 $('<li>')
                     .append(
@@ -40,9 +40,7 @@ class Question {
 
     static _build_multiple_choice_answers(question_id, options) {
         let fields = options.split(';');
-        console.dir(fields);
-
-        let content = $(`<ul id="answers_${question_id}">`);
+        let content = $(`<ul style="list-style: none" id="answers_${question_id}">`);
         if (!fields) {
             $('<li>').append(
                 'No options available'
@@ -50,9 +48,9 @@ class Question {
         } else {
             let form = $(`<form id="form_${question_id}">`);
             for (let option in fields) {
-
+                let sliced_option = fields[option].split('|')[1];
                 let temp = $('<li>').append(
-                    '<input type="radio" id="inputd-' + question_id + '" name="group1"/><span id="input-' + question_id + '">' + fields[option] + '</span>'
+                    '<input type="radio" id="inputd-' + question_id + '" name="group1"/><span id="input-' + question_id + '">' + sliced_option + '</span>'
                 );
                 form.append(temp);
             }
