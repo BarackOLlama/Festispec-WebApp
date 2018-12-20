@@ -49,8 +49,9 @@ class Question {
             let form = $(`<form id="form_${question_id}">`);
             for (let option in fields) {
                 let sliced_option = fields[option].split('|')[1];
+                let item = '<input type="radio" id="inputd-' + question_id + '" name="group1"/><span id="input-' + question_id + '">' + sliced_option + '</span>';
                 let temp = $('<li>').append(
-                    '<input type="radio" id="inputd-' + question_id + '" name="group1"/><span id="input-' + question_id + '">' + sliced_option + '</span>'
+                    item
                 );
                 form.append(temp);
             }
