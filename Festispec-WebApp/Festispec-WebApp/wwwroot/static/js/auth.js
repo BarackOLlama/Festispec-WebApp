@@ -10,6 +10,7 @@ function checkIfLoggedIn() {
 
 function logout() {
     eraseCookie("jwt_token");
+    eraseCookie("inspection");
     setCookie("user_id");
     checkIfLoggedIn();
 }
