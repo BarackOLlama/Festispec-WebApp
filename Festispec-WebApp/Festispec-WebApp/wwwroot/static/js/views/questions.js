@@ -11,8 +11,29 @@ class Question {
     }
 
     render_question_data() {
+        this._get_questions(function (questions) {
+            console.log(questions);
+        })
+    }
+
+    build_question_list(questions, cb) {
+        let target_ul = $('#QuestionsUl');
+        
+        for (let question in questions) {
+            target_ul.append();
+        }
+    }
+    
+    _build_internal_ul(question) {
+        
+    }
+
+    _get_questions(cb) {
         this.WebApp.getQuestionnaireByInspection(this.inspectionId, questionnaire => {
-            console.log(questionnaire);
+            if (questionnaire) {
+                questionnaire = questionnaire.questions;
+            }
+            return cb(questionnaire);
         })
     }
 }
