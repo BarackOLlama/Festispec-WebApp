@@ -72,7 +72,7 @@ class Question {
 }
 
 $(document).ready(function () {
-    // For every page a new javascript view (js/views/index.js at the moment)
+    // For every page a new javascript view (js/views/questions.js at the moment)
     // init the class
     let page = new Question();
     // Run method to modify this page with the data retrieved from the API

@@ -3,9 +3,23 @@ class Index {
         this.WebApp = new WebApp();
     }
 
+    static start_inspection(id) {
+        let cookie = getCookie('inspection');
+        if (cookie) {
+            if (cookie !== id) {
+                eraseCookie('inspection');
+            }
+        }
+        setCookie('inspection', id, 7)
+        window.location.href = 'questions.html';
+    }
+
     render_inspection_data() {
         // Select UL element created in the HTML based on ID. Keep the ID unique for every <ul>!
         let target_ul = $('#test_cj');
+
+        //backup this to use out of scope
+        let self = this;
         // Run function from api_helper, retrieving the data for this inspector.
         this.WebApp.getInspections(function (inspectorData) {
             console.log(inspectorData);
@@ -14,6 +28,12 @@ class Index {
                 // foreach through inspectorData, if you want to see the data before accessing it just execute console.log(inspectorData);
                 // And check the console tab in your "Inspect element" option in the browser
                 for (let index in inspectorData) {
+                    let a = document.createElement('a');
+                    a.id = inspectorData[index].id;
+                    a.addEventListener('click', function () {
+                        Index.start_inspection(inspectorData[index].id);
+                    });
+                    a.innerHTML = inspectorData[index].name;
                     // Add item to selected <ul>
                     target_ul.append(
                         // Add <li> to ul (list element)
@@ -25,7 +45,7 @@ class Index {
                                     inspectorData[index].id
                                 ),
                                 $('<li>').append(
-                                    inspectorData[index].name
+                                    a
                                 )
                             )
                         )
