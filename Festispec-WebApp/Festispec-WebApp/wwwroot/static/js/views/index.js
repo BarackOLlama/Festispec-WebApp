@@ -10,7 +10,7 @@ class Index {
                 eraseCookie('inspection');
             }
         }
-        setCookie('inspection', id, 7)
+        setCookie('inspection', id, 7);
         window.location.href = 'questions.html';
     }
 
