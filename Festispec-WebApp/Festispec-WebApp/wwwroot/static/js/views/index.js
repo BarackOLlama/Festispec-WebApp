@@ -19,7 +19,6 @@ class Index {
         let target_ul = $('#test_cj');
 
         //backup this to use out of scope
-        let self = this;
         // Run function from api_helper, retrieving the data for this inspector.
         this.WebApp.getInspections(function (inspectorData) {
             console.log(inspectorData);
