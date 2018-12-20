@@ -4,10 +4,30 @@
     width: 100%;
     top: 200px;
     position: relative;
-    text-align: center;
 }
 
 .mainIndexContainer {
     top: 200px;
     padding: 100px;
+}
+
+
+.inspectionAttribute {
+}
+
+.h2, h2 {
+    text-align: center;
+}
+
+ul #test_cj {
+    padding: 0px;
+    list-style-type: none;
+    list-style: none;
+    
+}
+
+#test_cj li {
+    padding: 0px;
+    list-style-type: none;
+    list-style: none;
 }
