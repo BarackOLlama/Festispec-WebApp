@@ -1,21 +1,4 @@
-﻿.mainContent-index {
-    background: white;
-    border-radius: 5px;
-    width: 100%;
-    top: 200px;
-    position: relative;
-}
-
-.mainIndexContainer {
-    top: 200px;
-    padding: 100px;
-}
-
-
-.inspectionAttribute {
-}
-
-.h2, h2 {
+﻿.h2, h2 {
     text-align: center;
 }
 
