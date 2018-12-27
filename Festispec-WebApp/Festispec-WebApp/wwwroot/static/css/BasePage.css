@@ -146,4 +146,9 @@
 
 .buttonDiv{
     clear:both;
+    text-align: left!important;
+}
+
+.answersDiv{
+    text-align: right!important;
 }
