@@ -23,7 +23,6 @@ class Question {
         for (let index in questions) {
             target_ul.append(this._build_internal_ul(questions[index]));
         }
-        console.log(JSON.stringify(this.multipleChoiceFormList, null, 4));
     }
 
     _build_internal_ul(question) {
@@ -78,15 +77,16 @@ class Question {
     _check_if_forms_are_filled() {
         // Count the multiple choice questions, and compare that to the amount of radio buttons checked to make sure we
         // have enough checked answers.
-        
-        let amount_of_questions = this.multipleChoiceFormList.length, amount_of_checked_buttons = Question._is_selected();
-        if(amount_of_questions !== amount_of_checked_buttons) {
+
+        let amount_of_questions = this.multipleChoiceFormList.length,
+            amount_of_checked_buttons = Question._is_selected();
+        if (amount_of_questions !== amount_of_checked_buttons) {
             alert('Please fill out all multiple choice answers.');
         }
- 
+
     }
-    
-    static _is_selected(){
+
+    static _is_selected() {
         let checked_buttons = 0;
         let radios = document.getElementsByTagName('input');
         for (let i = 0; i < radios.length; i++) {
@@ -94,9 +94,22 @@ class Question {
                 checked_buttons++;
             }
         }
-        
+
         return checked_buttons;
     };
+}
+
+class Events {
+    constructor(page, self) {
+        this.setConfirmButton(page, self)
+    }
+
+    setConfirmButton(page, self) {
+        let btn = document.getElementById('answerButton');
+        btn.addEventListener('click', function () {
+            page._check_if_forms_are_filled();
+        }.bind(self))
+    }
 }
 
 $(document).ready(function () {
@@ -105,8 +118,7 @@ $(document).ready(function () {
     let page = new Question();
     // Run method to modify this page with the data retrieved from the API
     page.render_question_data();
-    let btn = document.getElementById('answerButton');
-    btn.addEventListener('click', function () {
-        page._check_if_forms_are_filled();
-    }.bind(this))
+    
+    // Add events
+    new Events(page, this);
 });
