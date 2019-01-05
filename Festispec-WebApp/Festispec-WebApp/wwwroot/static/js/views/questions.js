@@ -10,6 +10,12 @@ class Question {
         this.WebApp = new WebApp();
         this.formList = [];
         this.multipleChoiceFormList = [];
+        this.openQuestionFormList = [];
+
+        this.multipleChoiceType = "Multiple Choice vraag";
+        this.multipleChoiceTableType = "Multiple Choice Tabelvraag";
+        this.openQuestionType = "Open Vraag";
+        this.openQuestionTableType = "Open Tabelvraag";
     }
 
     render_question_data() {
@@ -26,20 +32,83 @@ class Question {
     }
 
     _build_internal_ul(question) {
-        return $(`<ul style="list-style: none" id=${question.id}>`)
-            .append(
-                $('<li>')
+        console.log(question);
+
+        switch (question.questionType.name) {
+            case this.multipleChoiceType:
+                return $(`<ul style="list-style: none" id=${question.id}>`)
                     .append(
-                        question.content
-                    ),
-                $('<li>')
+                        $('<li>')
+                            .append(
+                                question.content
+                            ),
+                        $('<li>')
+                            .append(
+                                this._build_multiple_choice_answers(question.id, question.options)
+                            )
+                    );
+            case this.openQuestionType:
+                return $(`<ul style="list-style: none" id=${question.id}>`)
                     .append(
-                        this._build_multiple_choice_answers(question.id, question.options)
+                        $('<li>')
+                            .append(
+                                question.content
+                            ),
+                        $('<li>')
+                            .append(
+                                this.__build_open_question_answer(question.id)
+                            )
+                    );
+            case this.multipleChoiceTableType:
+                return $(`<ul style="list-style: none" id=${question.id}>`)
+                    .append(
+                        $('<li>')
+                            .append(
+                                question.content
+                            ),
+                        $('<li>')
+                            .append(
+                                this._build_multiple_choice_answers(question.id)
+                            )
+                    );
+
+            case this.openQuestionTableType:
+                return $(`<ul style="list-style: none" id=${question.id}>`)
+                    .append(
+                        $('<li>')
+                            .append(
+                                question.content
+                            ),
+                        $('<li>')
+                            .append(
+                                this.__build_open_question_answer(question.id)
+                            )
                     )
-            )
+        }
+
+    }
+
+    __build_open_question_answer(question_id) {
+        let content;
+        let form_id = `form_${question_id}`;
+        let form = $(`<form id="${form_id}" data-type="multiple">`);
+        let item = `<input type="text" autocomplete="off" id="inputd-${question_id}" data-type="${question_id}" name="question" style="margin-bottom:10px" class="form-control col-md-6" placeholder="Tekst hier.."/>`;
+        let temp = $('<li>').append(
+            item
+        );
+        form.append(temp);
+
+        content = form;
+        this.openQuestionFormList.push(`group_${question_id}`);
+
+
+        return content;
     }
 
     _build_multiple_choice_answers(question_id, options) {
+        if (!options) {
+            return;
+        }
         let fields = options.split(';');
         let content = $(`<ul style="list-style: none" id="answers_${question_id}">`);
         if (!fields) {
@@ -96,7 +165,8 @@ class Question {
         }
 
         return checked_buttons;
-    };
+    }
+    ;
 }
 
 class Events {
@@ -118,7 +188,7 @@ $(document).ready(function () {
     let page = new Question();
     // Run method to modify this page with the data retrieved from the API
     page.render_question_data();
-    
+
     // Add events
     new Events(page, this);
 });
