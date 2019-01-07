@@ -92,7 +92,7 @@ class Question {
         let content;
         let form_id = `form_${question_id}`;
         let form = $(`<form id="${form_id}" data-type="multiple">`);
-        let item = `<input type="text" autocomplete="off" id="inputd-${question_id}" data-type="${question_id}" name="question" style="margin-bottom:10px" class="form-control col-md-6" placeholder="Tekst hier.."/>`;
+        let item = `<input type="text" autocomplete="off" id="inputd-${question_id}" data-type="${question_id}" name="question" style="margin-bottom:10px" class="form-control col-md-12" placeholder="Tekst hier.."/>`;
         let temp = $('<li>').append(
             item
         );
