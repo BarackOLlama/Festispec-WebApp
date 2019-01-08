@@ -11,11 +11,14 @@ class Question {
         this.formList = [];
         this.multipleChoiceFormList = [];
         this.openQuestionFormList = [];
+        this.openQuestionTableFormList = [];
 
         this.multipleChoiceType = "Multiple Choice vraag";
         this.multipleChoiceTableType = "Multiple Choice Tabelvraag";
         this.openQuestionType = "Open Vraag";
         this.openQuestionTableType = "Open Tabelvraag";
+
+
     }
 
     render_question_data() {
@@ -29,6 +32,7 @@ class Question {
         for (let index in questions) {
             target_ul.append(this._build_internal_ul(questions[index]));
         }
+
     }
 
     _build_internal_ul(question) {
@@ -81,7 +85,7 @@ class Question {
                             ),
                         $('<li>')
                             .append(
-                                this.__build_open_question_answer(question.id)
+                                this._build_open_question_table(question.id, question.columns)
                             )
                     )
         }
@@ -103,6 +107,46 @@ class Question {
 
 
         return content;
+    }
+
+    _build_open_question_table(question_id, columns) {
+        if (!columns) {
+            return;
+        }
+        let rows = columns.split('|');
+        let rowCount = rows[0];
+
+        let table = document.createElement("table");
+        table.className = "table";
+        let row = document.createElement("tr");
+        for(let i = 1; i < rows.length; i++) {
+            let head = document.createElement("th");
+            
+            let content = document.createTextNode(rows[i]);
+            
+            head.appendChild(content);
+            row.appendChild(head);
+            
+        }
+        table.appendChild(row);
+        
+        for (let i = 0; i < rowCount; i++) {
+            let row = document.createElement("tr");
+            for (let j = 1; j < rows.length; j++) {
+                let column = document.createElement("td");
+                let textarea = document.createElement('textarea');
+                textarea.placeholder = "Text here....";
+                textarea.setAttribute('data-name', `${question_id}-${i}-${j}`);
+                textarea.setAttribute('cols', '40');
+                textarea.className = "form-control";
+                column.appendChild(textarea);
+                row.appendChild(column);
+            }
+            table.appendChild(row);
+        }
+        
+        
+        return table;
     }
 
     _build_multiple_choice_answers(question_id, options) {
