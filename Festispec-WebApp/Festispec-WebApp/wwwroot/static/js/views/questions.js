@@ -1,5 +1,5 @@
 class Question {
-    constructor(inspectionId = null) {
+    constructor(inspectionId = null,) {
         if (!inspectionId) {
             inspectionId = getCookie('inspection');
             if (!inspectionId) {
@@ -12,6 +12,7 @@ class Question {
         this.multipleChoiceFormList = [];
         this.openQuestionFormList = [];
         this.openQuestionTableFormList = [];
+        this.multipleChoiceTableFormList = [];
 
         this.multipleChoiceType = "Multiple Choice vraag";
         this.multipleChoiceTableType = "Multiple Choice Tabelvraag";
@@ -72,7 +73,7 @@ class Question {
                             ),
                         $('<li>')
                             .append(
-                                this._build_multiple_choice_answers(question.id)
+                                this._build_open_question_answer_table(question.id, question.columns, question.options)
                             )
                     );
 
@@ -109,6 +110,74 @@ class Question {
         return content;
     }
 
+
+    _build_open_question_answer_table(question_id, columns, options) {
+        if (!columns) {
+            return;
+        }
+        let ul = $(`<ul style="list-style: none" id=open_${question_id}>`);
+
+        let fields = options.split(';');
+        let available_answers_to_fill = [];
+        for (let i = 0; i < fields.length; i++) {
+            let option = fields[i].split('|');
+
+            available_answers_to_fill.push(option[0].toLowerCase());
+            ul.append(
+                $('<li>').append(
+                    `${option[0]}: ${option[1]}`
+                )
+            )
+        }
+
+        let rows = columns.split('|');
+        let rowCount = rows[0];
+
+        let table = document.createElement("table");
+        table.className = "table";
+        let row = document.createElement("tr");
+        for (let i = 1; i < rows.length; i++) {
+            let head = document.createElement("th");
+
+            let content = document.createTextNode(rows[i]);
+
+            head.appendChild(content);
+            row.appendChild(head);
+
+        }
+        table.appendChild(row);
+
+        for (let i = 0; i < rowCount; i++) {
+            let row = document.createElement("tr");
+            for (let j = 1; j < rows.length; j++) {
+                let input_id = `${question_id}-${i}-${j}`;
+                let column = document.createElement("td");
+                let textarea = document.createElement('textarea');
+                textarea.placeholder = "Text here....";
+                textarea.setAttribute('data-name', `${input_id}`);
+                textarea.setAttribute('cols', '40');
+                textarea.className = "form-control";
+                textarea.addEventListener('input', function (t) {
+                   if(available_answers_to_fill.includes(t.data.toLowerCase())) {
+                       textarea.value = t.data;
+                   } else {
+                       textarea.value = '';
+                   }
+                }.bind(this));
+                column.appendChild(textarea);
+                row.appendChild(column);
+            }
+            table.appendChild(row);
+        }
+
+        ul.append(
+            $('<li>').append(
+                table
+            )
+        );
+        return ul;;
+    }
+
     _build_open_question_table(question_id, columns) {
         if (!columns) {
             return;
@@ -119,24 +188,25 @@ class Question {
         let table = document.createElement("table");
         table.className = "table";
         let row = document.createElement("tr");
-        for(let i = 1; i < rows.length; i++) {
+        for (let i = 1; i < rows.length; i++) {
             let head = document.createElement("th");
-            
+
             let content = document.createTextNode(rows[i]);
-            
+
             head.appendChild(content);
             row.appendChild(head);
-            
+
         }
         table.appendChild(row);
-        
+
         for (let i = 0; i < rowCount; i++) {
             let row = document.createElement("tr");
             for (let j = 1; j < rows.length; j++) {
+                let input_id = `${question_id}-${i}-${j}`;
                 let column = document.createElement("td");
                 let textarea = document.createElement('textarea');
                 textarea.placeholder = "Text here....";
-                textarea.setAttribute('data-name', `${question_id}-${i}-${j}`);
+                textarea.setAttribute('data-name', `${input_id}`);
                 textarea.setAttribute('cols', '40');
                 textarea.className = "form-control";
                 column.appendChild(textarea);
@@ -144,8 +214,8 @@ class Question {
             }
             table.appendChild(row);
         }
-        
-        
+
+
         return table;
     }
 
