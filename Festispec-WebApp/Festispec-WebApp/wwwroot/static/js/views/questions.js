@@ -178,7 +178,7 @@ class Question {
             )
         );
         return ul;
-        ;
+        
     }
 
     _build_open_question_table(question_id, columns) {
