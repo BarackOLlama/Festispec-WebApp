@@ -25,6 +25,8 @@ class Question {
     render_question_data() {
         this._get_questions(questions => {
             this._build_question_list(questions);
+            console.log(this.multipleChoiceFormList);
+            console.log(this.openQuestionFormList);
         })
     }
 
@@ -158,11 +160,11 @@ class Question {
                 textarea.setAttribute('cols', '40');
                 textarea.className = "form-control";
                 textarea.addEventListener('input', function (t) {
-                   if(available_answers_to_fill.includes(t.data.toLowerCase())) {
-                       textarea.value = t.data;
-                   } else {
-                       textarea.value = '';
-                   }
+                    if (available_answers_to_fill.includes(t.data.toLowerCase())) {
+                        textarea.value = t.data;
+                    } else {
+                        textarea.value = '';
+                    }
                 }.bind(this));
                 column.appendChild(textarea);
                 row.appendChild(column);
@@ -175,7 +177,8 @@ class Question {
                 table
             )
         );
-        return ul;;
+        return ul;
+        ;
     }
 
     _build_open_question_table(question_id, columns) {
