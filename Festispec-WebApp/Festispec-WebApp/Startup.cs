@@ -33,6 +33,7 @@ namespace Festispec_WebApp
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IQuestionnaireService, QuestionnaireService>();
             services.AddScoped<IInspectionService, InspectionService>();
+            services.AddScoped<IAnswerService, AnswerService>();
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 

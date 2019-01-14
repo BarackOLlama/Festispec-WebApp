@@ -1,4 +1,5 @@
 using AutoMapper;
+using Festispec_WebApp.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -40,6 +41,7 @@ namespace Festispec_WebApp.Controllers
             var questionnaire = _questionnaireService.GetById(id);
             return Ok(questionnaire);
         }
+
         [AllowAnonymous]
         [HttpGet("inspection/{inspectionId}")]
         public IActionResult GetQuestionnaireByInspection(int inspectionId)
@@ -47,5 +49,7 @@ namespace Festispec_WebApp.Controllers
             var questionnaire = _questionnaireService.GetByInspection(inspectionId);
             return Ok(questionnaire);
         }
+
+      
     }
 }

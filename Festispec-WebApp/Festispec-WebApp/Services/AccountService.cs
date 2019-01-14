@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Festispec_WebApp.Helpers;
 using Festispec_WebApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Festispec_WebApp.Services
 {
@@ -51,7 +52,8 @@ namespace Festispec_WebApp.Services
  
         public IEnumerable<Accounts> GetAll()
         {
-            return _context.Accounts;
+            return _context.Accounts
+                .Include(a => a.Inspectors);
         }
  
         public Accounts GetById(int id)

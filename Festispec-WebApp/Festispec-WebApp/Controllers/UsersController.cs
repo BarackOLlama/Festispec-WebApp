@@ -102,8 +102,8 @@ namespace Festispec_WebApp.Controllers
         public IActionResult GetAll()
         {
             var users =  _accountService.GetAll();
-            var userDtos = _mapper.Map<IList<UserDto>>(users);
-            return Ok(userDtos);
+//            var userDtos = _mapper.Map<IList<UserDto>>(users);
+            return Ok(users);
         }
         [AllowAnonymous]
         [HttpGet("{id}")]
