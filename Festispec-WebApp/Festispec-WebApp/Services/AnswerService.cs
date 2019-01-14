@@ -25,12 +25,10 @@ namespace Festispec_WebApp.Services
     public class AnswerService : IAnswerService
     {
         private readonly FSContext _context;
-        private readonly QuestionnaireService _questionnaireService;
 
         public AnswerService(FSContext fsContext)
         {
             _context = fsContext;
-            _questionnaireService = new QuestionnaireService(fsContext);
         }
 
         public Inspectors GetInspector(int inspectorId)
