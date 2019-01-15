@@ -46,6 +46,7 @@ namespace Festispec_WebApp.Services
             return _context.Questionnaires
                 .Include(questionnaire => questionnaire.Questions).ThenInclude(a => a.QuestionType)
                 .Include(questionnaire => questionnaire.Questions).ThenInclude(a => a.Answers)
+                .ThenInclude(a => a.Inspector)
                 .FirstOrDefault(c => c.InspectionId == inspectionId);
         }
     }
