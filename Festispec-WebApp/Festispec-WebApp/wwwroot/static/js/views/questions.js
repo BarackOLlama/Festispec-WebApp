@@ -27,18 +27,35 @@ class Question {
     _check_if_forms_are_filled() {
         // Count the multiple choice questions, and compare that to the amount of radio buttons checked to make sure we
         // have enough checked answers.
+        this._check_multiple_choice();
+        this._check_multiple_choice_table();
+        this._check_open_questions();
+        this._check_open_question_table();
+    }
 
+    _check_multiple_choice() {
         let amount_of_questions = this.multipleChoiceFormList.length,
             amount_of_checked_buttons = Question._is_selected();
         if (amount_of_questions !== amount_of_checked_buttons) {
             alert('Please fill out all multiple choice answers.');
         }
 
-        this._check_multi_choice_table();
-
     }
 
-    _check_multi_choice_table() {
+    _check_open_questions() {
+        let list = this.openQuestionFormList;
+        for (let i in list) {
+            let item = $(`#${list[i]}`);
+            console.log(item.val());
+            if(!item.val()) {
+                Question._add_color(false, item);
+            } else {
+                Question._add_color(true, item);
+            }
+        }
+    }
+
+    _check_multiple_choice_table() {
         let list = this.multipleChoiceTableFormList;
         for (let i in list) {
             for (let j in list[i]) {
@@ -52,7 +69,21 @@ class Question {
             }
         }
     }
-    
+    _check_open_question_table() {
+        let list = this.openQuestionTableFormList;
+        for (let i in list) {
+            for (let j in list[i]) {
+                let item = $(`#${list[i][j]}`);
+                let value = item.val();
+                if (!value) {
+                    Question._add_color(false, item);
+                } else {
+                    Question._add_color(true, item);
+                }
+            }
+        }
+    }
+
     render_question_data() {
         this._get_questions(questions => {
             this._build_question_list(questions);
@@ -135,7 +166,7 @@ class Question {
         form.append(temp);
 
         content = form;
-        this.openQuestionFormList.push(`group_${question_id}`);
+        this.openQuestionFormList.push(`inputd-${question_id}`);
 
 
         return content;
@@ -185,7 +216,7 @@ class Question {
                 let input_id = `${question_id}-${i}-${j}`;
                 let column = document.createElement("td");
                 let textarea = document.createElement('textarea');
-                textarea.placeholder = "Text here..e..";
+                textarea.placeholder = "Text here...";
                 textarea.setAttribute('data-name', `${input_id}`);
                 textarea.id = input_id;
                 textarea.setAttribute('cols', '40');
@@ -204,8 +235,6 @@ class Question {
             this.multipleChoiceTableFormList.push(question_textboxes);
             table.appendChild(row);
         }
-        console.log('diing');
-        console.dir(this.multipleChoiceTableFormList);
         ul.append(
             $('<li>').append(
                 table
@@ -237,18 +266,22 @@ class Question {
         table.appendChild(row);
 
         for (let i = 0; i < rowCount; i++) {
+            let question_textboxes = [];
             let row = document.createElement("tr");
             for (let j = 1; j < rows.length; j++) {
                 let input_id = `${question_id}-${i}-${j}`;
                 let column = document.createElement("td");
                 let textarea = document.createElement('textarea');
-                textarea.placeholder = "Text here..d..";
+                textarea.placeholder = "Text here...";
                 textarea.setAttribute('data-name', `${input_id}`);
                 textarea.setAttribute('cols', '40');
+                textarea.id = input_id;
                 textarea.className = "form-control";
                 column.appendChild(textarea);
                 row.appendChild(column);
+                question_textboxes.push(input_id)
             }
+            this.openQuestionTableFormList.push(question_textboxes);
             table.appendChild(row);
         }
 
@@ -294,15 +327,16 @@ class Question {
         })
     }
 
-    
+
     static _add_color(accepted, item) {
-        if(accepted){
+        if (accepted) {
             $(item).addClass("green-border");
         } else {
             $(item).addClass("red-border");
             $(item).focus();
         }
     }
+
     static _is_selected() {
         let checked_buttons = 0;
         let radios = document.getElementsByTagName('input');
