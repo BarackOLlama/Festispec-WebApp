@@ -7,11 +7,11 @@ class Answer {
         this._inspector_id = value;
     }
 
-    get answerContent() {
+    get getAnswerContent() {
         return this._answerContent;
     }
 
-    set answerContent(value) {
+    set setAnswerContent(value) {
         this._answerContent = value;
     }
 
@@ -25,7 +25,7 @@ class Answer {
 
     toJSON() {
         return {
-            'Content': this.answerContent,
+            'Content': this.getAnswerContent,
             'QuestionId': this.questionId,
             'InspectorId': this.inspectorId,
         }

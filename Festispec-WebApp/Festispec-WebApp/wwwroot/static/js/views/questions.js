@@ -46,6 +46,7 @@ class Question {
         } else {
             let multi_answers = this._retrieve_multiple_choice_answers();
             let open_answers = this._retrieve_open_question_answers();
+            let open_table_answers = this._retrieve_open_question_table_answers();
 
             for (let answer in multi_answers) {
                 console.log(multi_answers[answer].toJSON());
@@ -53,6 +54,11 @@ class Question {
             for (let answer in open_answers) {
                 console.log(open_answers[answer].toJSON());
             }
+
+            console.log("Dir test");
+
+            console.dir(this.openQuestionTableFormList);
+            console.dir(this.multipleChoiceTableFormList);
         }
     }
 
@@ -66,7 +72,6 @@ class Question {
         for (let i in list) {
             let group = `${list[i]}`;
             let items = $(`[data-question=${group}]`);
-            console.dir(items);
 
             for (let i in items) {
                 if (items[i].checked) {
@@ -95,7 +100,43 @@ class Question {
 
         return answer_list;
     }
-    
+
+    /**
+     * Retrieves all questions of this type.
+     * @private
+     */
+    _retrieve_open_question_table_answers() {
+        let list = this.openQuestionTableFormList;
+        let answers_list = [];
+        for (let i in list) {
+            let answer = new Answer();
+            answer.inspectorId = this.inspectorId;
+            for (let j = 0; j < list[i].length; j++) {
+                for(let k in list[i][j]) {
+                    let textareaId = list[i][j][k];
+                    let item = $(`#${textareaId}`);
+                    answer.questionId = textareaId.split('-')[0];
+                    let content = answer.getAnswerContent;
+                    let value = item[0].value;
+                    if(content) {
+                        if(!content.endsWith(';')){
+                            answer.setAnswerContent = (content + '|' + value)
+                        } else {
+                            answer.setAnswerContent = (content + value)
+                        }
+                    } else {
+                        answer.setAnswerContent = (value)
+                    }
+                    
+                }
+                let content = answer.getAnswerContent;
+                answer.setAnswerContent = (content + ';');
+            }
+            answers_list.push(answer);
+        }
+        return answers_list;
+    }
+
     /**
      * Checks if all questions of this type are answered.
      * @private
@@ -116,7 +157,7 @@ class Question {
     _check_open_questions() {
         let list = this.openQuestionFormList;
         for (let i in list) {
-            let item = $(`#${list[i]}`);
+            let item = $(`#inputd-${list[i]}`);
             if (!item.val()) {
                 Question._add_color(false, item);
             } else {
@@ -160,12 +201,14 @@ class Question {
         let list = this.openQuestionTableFormList;
         for (let i in list) {
             for (let j in list[i]) {
-                let item = $(`#${list[i][j]}`);
-                let value = item.val();
-                if (!value) {
-                    Question._add_color(false, item);
-                } else {
-                    Question._add_color(true, item);
+                for (let k in list[i][j]) {
+                    let item = $(`#${list[i][j][k]}`);
+                    let value = item.val();
+                    if (!value) {
+                        Question._add_color(false, item);
+                    } else {
+                        Question._add_color(true, item);
+                    }
                 }
             }
         }
@@ -386,7 +429,7 @@ class Question {
 
         }
         table.appendChild(row);
-
+        let question = [];
         for (let i = 0; i < rowCount; i++) {
             let question_textboxes = [];
             let row = document.createElement("tr");
@@ -403,9 +446,10 @@ class Question {
                 row.appendChild(column);
                 question_textboxes.push(input_id)
             }
-            this.openQuestionTableFormList.push(question_textboxes);
+            question.push(question_textboxes);
             table.appendChild(row);
         }
+        this.openQuestionTableFormList.push(question);
 
 
         return table;
