@@ -23,16 +23,50 @@ class Question {
         new Events(this, HTML_PAGE);
     }
 
-
+    _save_items_to_db(save) {
+        let json_list = {};
+    }
+    
+    
     _check_if_forms_are_filled() {
         // Count the multiple choice questions, and compare that to the amount of radio buttons checked to make sure we
         // have enough checked answers.
-        this._check_multiple_choice();
-        this._check_multiple_choice_table();
-        this._check_open_questions();
-        this._check_open_question_table();
+        let multi = this._check_multiple_choice();
+        let multi_choice = this._check_multiple_choice_table();
+        let open = this._check_open_questions();
+        let open_table = this._check_open_question_table();
+        
+        if(multi && multi_choice && open && open_table) {
+            let multi_answers = this._retrieve_multiple_choice_answers();
+            console.dir(multi_answers);
+
+        } else {
+            let multi_answers = this._retrieve_multiple_choice_answers();
+            console.dir(multi_answers);
+
+        }
     }
 
+    _retrieve_multiple_choice_answers() {
+        let list = this.multipleChoiceFormList;
+        let answer_list = [];
+        for(let i in list) {
+            let group = `${list[i]}`;
+            let items =  $(`[data-question=${group}]`);
+            console.dir(items);
+            
+            for(let i in items) {
+                if(items[i].checked) {
+                    let answer_char = items[i].dataset.type;
+                    let answer = new Answer(group, answer_char);
+                    answer_list.push(answer);
+                }
+            }
+        }
+        
+        return answer_list;
+    }
+    
     _check_multiple_choice() {
         let amount_of_questions = this.multipleChoiceFormList.length,
             amount_of_checked_buttons = Question._is_selected();
@@ -46,7 +80,6 @@ class Question {
         let list = this.openQuestionFormList;
         for (let i in list) {
             let item = $(`#${list[i]}`);
-            console.log(item.val());
             if(!item.val()) {
                 Question._add_color(false, item);
             } else {
@@ -57,17 +90,25 @@ class Question {
 
     _check_multiple_choice_table() {
         let list = this.multipleChoiceTableFormList;
+        let accepted = true;
         for (let i in list) {
             for (let j in list[i]) {
                 let item = $(`#${list[i][j]}`);
                 let value = item.val();
                 if (!value) {
                     Question._add_color(false, item);
+                    accepted = false;
                 } else {
                     Question._add_color(true, item);
                 }
             }
+            
+            if(!accepted) {
+                return false;
+            }
         }
+        
+        return true;
     }
     _check_open_question_table() {
         let list = this.openQuestionTableFormList;
@@ -299,12 +340,13 @@ class Question {
             $('<li>').append(
                 'No options available')
         } else {
-            let form_id = `form_${question_id}`;
+            let form_id = `${question_id}`;
             let form = $(`<form id="${form_id}" data-type="multiple">`);
             for (let option in fields) {
                 let sliced_option_name = fields[option].split('|')[0];
                 let sliced_option_text = fields[option].split('|')[1];
-                let item = `<input type="radio" data-type="${sliced_option_name}" id="inputd-${question_id}" name="group_${question_id}"/><span id="input-${question_id}">${sliced_option_text}</span>`;
+                let item_id = `${question_id}_${sliced_option_name}`;
+                let item = `<input type="radio" data-type="${sliced_option_name}" data-question="${question_id}" id="${item_id}" name="group_${question_id}"/><span id="input-${question_id}">${sliced_option_text}</span>`;
                 let temp = $('<li>').append(
                     item
                 );
@@ -312,7 +354,7 @@ class Question {
             }
 
             content.append(form);
-            this.multipleChoiceFormList.push(`group_${question_id}`)
+            this.multipleChoiceFormList.push(`${question_id}`)
         }
 
         return content;
