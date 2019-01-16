@@ -28,7 +28,10 @@ class Question {
         let json_list = {};
     }
 
-
+    /**
+     * Check to make sure the questionnaire is answered as a whole.
+     * @private
+     */
     _check_if_forms_are_filled() {
         // Count the multiple choice questions, and compare that to the amount of radio buttons checked to make sure we
         // have enough checked answers.
@@ -53,6 +56,10 @@ class Question {
         }
     }
 
+    /**
+     * Retrieves all questions of this type.
+     * @private
+     */
     _retrieve_multiple_choice_answers() {
         let list = this.multipleChoiceFormList;
         let answer_list = [];
@@ -73,6 +80,10 @@ class Question {
         return answer_list;
     }
 
+    /**
+     * Retrieves all questions of this type.
+     * @private
+     */
     _retrieve_open_question_answers() {
         let list = this.openQuestionFormList;
         let answer_list = [];
@@ -84,7 +95,11 @@ class Question {
 
         return answer_list;
     }
-
+    
+    /**
+     * Checks if all questions of this type are answered.
+     * @private
+     */
     _check_multiple_choice() {
         let amount_of_questions = this.multipleChoiceFormList.length,
             amount_of_checked_buttons = Question._is_selected();
@@ -94,6 +109,10 @@ class Question {
 
     }
 
+    /**
+     * Checks if all questions of this type are answered.
+     * @private
+     */
     _check_open_questions() {
         let list = this.openQuestionFormList;
         for (let i in list) {
@@ -106,6 +125,10 @@ class Question {
         }
     }
 
+    /**
+     * Checks if all questions of this type are answered.
+     * @private
+     */
     _check_multiple_choice_table() {
         let list = this.multipleChoiceTableFormList;
         let accepted = true;
@@ -129,6 +152,10 @@ class Question {
         return true;
     }
 
+    /**
+     * Checks if all questions of this type are answered.
+     * @private
+     */
     _check_open_question_table() {
         let list = this.openQuestionTableFormList;
         for (let i in list) {
@@ -144,12 +171,20 @@ class Question {
         }
     }
 
+    /**
+     * Renders all HTML lists into one list we see in the view.
+     */
     render_question_data() {
         this._get_questions(questions => {
             this._build_question_list(questions);
         })
     }
 
+    /**
+     * Builds all answers into a HTML list
+     * @param questions
+     * @private
+     */
     _build_question_list(questions) {
         let target_ul = $('#QuestionsUl');
         for (let index in questions) {
@@ -158,6 +193,12 @@ class Question {
 
     }
 
+    /**
+     * Builds question list based on question type, returns valid HTML
+     * @param question
+     * @returns {*|jQuery|*|*}
+     * @private
+     */
     _build_internal_ul(question) {
         // console.log(question);
 
@@ -215,6 +256,12 @@ class Question {
 
     }
 
+    /**
+     * Build's an open question and returns valid HTML
+     * @param question_id
+     * @returns {jQuery.fn.init|jQuery|HTMLElement}
+     * @private
+     */
     _build_open_question_answer(question_id) {
         let content;
         let form_id = `form_${question_id}`;
@@ -233,6 +280,14 @@ class Question {
     }
 
 
+    /**
+     * Build's a table with multiple choice text questions and returns valid HTML
+     * @param question_id
+     * @param columns
+     * @param options
+     * @returns {jQuery.fn.init|jQuery|HTMLElement}
+     * @private
+     */
     _build_open_multi_choice_answer_table(question_id, columns, options) {
         if (!columns) {
             return;
@@ -304,6 +359,13 @@ class Question {
 
     }
 
+    /**
+     * Build's a list with open questions and returns valid HTML
+     * @param question_id
+     * @param columns
+     * @returns {*}
+     * @private
+     */
     _build_open_question_table(question_id, columns) {
         if (!columns) {
             return;
@@ -349,6 +411,13 @@ class Question {
         return table;
     }
 
+    /**
+     * Build's a list with multiple choice questions and returns valid HTML
+     * @param question_id
+     * @param options
+     * @returns {jQuery.fn.init|jQuery|HTMLElement}
+     * @private
+     */
     _build_multiple_choice_answers(question_id, options) {
         if (!options) {
             return;
@@ -379,6 +448,11 @@ class Question {
         return content;
     }
 
+    /**
+     * Returns all the questions from a questionnaire
+     * @param cb
+     * @private
+     */
     _get_questions(cb) {
         this.WebApp.getQuestionnaireByInspection(this.inspectionId, questionnaire => {
             if (questionnaire) {
@@ -389,6 +463,12 @@ class Question {
     }
 
 
+    /**
+     * Adds a colored border to an input field
+     * @param accepted
+     * @param item
+     * @private
+     */
     static _add_color(accepted, item) {
         if (accepted) {
             $(item).addClass("green-border");
@@ -398,6 +478,13 @@ class Question {
         }
     }
 
+    /**
+     * Counts all the radiobuttons that are selected, returns the value
+     * Match the value with the amount of radiobutton questions, and we know
+     * if all the radio button forms are filled.
+     * @returns {number}
+     * @private
+     */
     static _is_selected() {
         let checked_buttons = 0;
         let radios = document.getElementsByTagName('input');
@@ -416,6 +503,11 @@ class Events {
         this.setConfirmButton(page, self)
     }
 
+    /**
+     * Add Event to submit form button
+     * @param page
+     * @param self
+     */
     setConfirmButton(page, self) {
         let btn = document.getElementById('answerButton');
         btn.addEventListener('click', function () {
