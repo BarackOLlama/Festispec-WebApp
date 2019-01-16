@@ -48,6 +48,11 @@ namespace Festispec_WebApp.Services
 
         public Answers Save(AnswerDto answerDto)
         {
+//            var inspector = _context.Inspectors
+//                .Where(a => a.Account.Id == accountId)
+//                .Select(i => i.Id).FirstOrDefault();
+//
+//            return inspector;
             // Check if the answer already exists 
             var answer = GetAnswer(answerDto.QuestionId, answerDto.InspectorId);
             if (answer != null)

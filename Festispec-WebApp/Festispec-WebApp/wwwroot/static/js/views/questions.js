@@ -6,6 +6,7 @@ class Question {
                 window.location.href = 'index.html';
             }
         }
+        this.inspectorId = getCookie("inspector");
         this.inspectionId = inspectionId;
         this.WebApp = new WebApp();
         this.formList = [];
@@ -26,8 +27,8 @@ class Question {
     _save_items_to_db(save) {
         let json_list = {};
     }
-    
-    
+
+
     _check_if_forms_are_filled() {
         // Count the multiple choice questions, and compare that to the amount of radio buttons checked to make sure we
         // have enough checked answers.
@@ -35,38 +36,55 @@ class Question {
         let multi_choice = this._check_multiple_choice_table();
         let open = this._check_open_questions();
         let open_table = this._check_open_question_table();
-        
-        if(multi && multi_choice && open && open_table) {
+
+        if (multi && multi_choice && open && open_table) {
             let multi_answers = this._retrieve_multiple_choice_answers();
-            console.dir(multi_answers);
 
         } else {
             let multi_answers = this._retrieve_multiple_choice_answers();
-            console.dir(multi_answers);
+            let open_answers = this._retrieve_open_question_answers();
 
+            for (let answer in multi_answers) {
+                console.log(multi_answers[answer].toJSON());
+            }
+            for (let answer in open_answers) {
+                console.log(open_answers[answer].toJSON());
+            }
         }
     }
 
     _retrieve_multiple_choice_answers() {
         let list = this.multipleChoiceFormList;
         let answer_list = [];
-        for(let i in list) {
+        for (let i in list) {
             let group = `${list[i]}`;
-            let items =  $(`[data-question=${group}]`);
+            let items = $(`[data-question=${group}]`);
             console.dir(items);
-            
-            for(let i in items) {
-                if(items[i].checked) {
+
+            for (let i in items) {
+                if (items[i].checked) {
                     let answer_char = items[i].dataset.type;
-                    let answer = new Answer(group, answer_char);
+                    let answer = new Answer(group, answer_char, this.inspectorId);
                     answer_list.push(answer);
                 }
             }
         }
-        
+
         return answer_list;
     }
-    
+
+    _retrieve_open_question_answers() {
+        let list = this.openQuestionFormList;
+        let answer_list = [];
+        for (let i in list) {
+            let item = $(`#inputd-${list[i]}`);
+            let answer = new Answer(item[0].dataset.type, item.val(), this.inspectorId);
+            answer_list.push(answer);
+        }
+
+        return answer_list;
+    }
+
     _check_multiple_choice() {
         let amount_of_questions = this.multipleChoiceFormList.length,
             amount_of_checked_buttons = Question._is_selected();
@@ -80,7 +98,7 @@ class Question {
         let list = this.openQuestionFormList;
         for (let i in list) {
             let item = $(`#${list[i]}`);
-            if(!item.val()) {
+            if (!item.val()) {
                 Question._add_color(false, item);
             } else {
                 Question._add_color(true, item);
@@ -102,14 +120,15 @@ class Question {
                     Question._add_color(true, item);
                 }
             }
-            
-            if(!accepted) {
+
+            if (!accepted) {
                 return false;
             }
         }
-        
+
         return true;
     }
+
     _check_open_question_table() {
         let list = this.openQuestionTableFormList;
         for (let i in list) {
@@ -164,7 +183,7 @@ class Question {
                             ),
                         $('<li>')
                             .append(
-                                this.__build_open_question_answer(question.id)
+                                this._build_open_question_answer(question.id)
                             )
                     );
             case this.multipleChoiceTableType:
@@ -196,7 +215,7 @@ class Question {
 
     }
 
-    __build_open_question_answer(question_id) {
+    _build_open_question_answer(question_id) {
         let content;
         let form_id = `form_${question_id}`;
         let form = $(`<form id="${form_id}" data-type="multiple">`);
@@ -207,7 +226,7 @@ class Question {
         form.append(temp);
 
         content = form;
-        this.openQuestionFormList.push(`inputd-${question_id}`);
+        this.openQuestionFormList.push(`${question_id}`);
 
 
         return content;

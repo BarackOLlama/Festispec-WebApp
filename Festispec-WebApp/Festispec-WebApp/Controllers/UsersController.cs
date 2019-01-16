@@ -110,8 +110,8 @@ namespace Festispec_WebApp.Controllers
         public IActionResult GetById(int id)
         {
             var user =  _accountService.GetById(id);
-            var userDto = _mapper.Map<UserDto>(user);
-            return Ok(userDto);
+//            var userDto = _mapper.Map<UserDto>(user);
+            return Ok(user);
         }
  
         [HttpPut("{id}")]

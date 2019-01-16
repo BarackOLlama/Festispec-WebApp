@@ -23,7 +23,7 @@ class Answer {
         this._questionId = value;
     }
 
-    toJson() {
+    toJSON() {
         return {
             'Content': this.answerContent,
             'QuestionId': this.questionId,

@@ -16,7 +16,9 @@ class WebApp {
             headers: {
                 'Authorization': getCookie('jwt_token')
             }
-        })
+        });
+        
+        this.setInspectorByAccount(currentInspectorId);
 
     }
 
@@ -93,6 +95,20 @@ class WebApp {
             url: `/api/Inspections/${id}`,
             success: function (data) {
                 return callBack(data);
+            }
+        });
+    }
+    
+    setInspectorByAccount(id) {
+        $.ajax({
+            type: 'GET',
+            url: `/Users/${id}`,
+            success: function (data) {
+                // setCookie("inspector", data[0], 7);
+                setCookie("inspector", data.inspectors[0].id, 7);
+            },
+            error: function (error) {
+                console.log(error);
             }
         });
     }
