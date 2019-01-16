@@ -29,7 +29,31 @@ class WebApp {
     set CurrentInspectorId(value) {
         this._CurrentInspectorId = value;
     }
-
+    
+    postAnswer(answer, callBack) {
+        /**
+         * Sends post request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        $.ajax({
+            type: 'POST',
+            url: '/api/Answer',
+            contentType: "application/json",
+            dataType: "json",
+            body: answer,
+            success: function (data) {
+                return callBack(data);
+            },
+            error: function (error) {
+                console.log(answer);
+                return callBack(error);
+            }
+        });
+    }
+    
     getInspectors(callBack) {
         /**
          * Sends get request to target, receives response

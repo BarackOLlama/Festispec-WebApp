@@ -25,7 +25,44 @@ class Question {
     }
 
     _save_items_to_db(save) {
-        let json_list = {};
+        let multi_answers = this._retrieve_multiple_choice_answers();
+        let open_answers = this._retrieve_open_question_answers();
+        let open_table_answers = this._retrieve_open_question_table_answers();
+        let multi_table_answers = this._retrieve_multiple_choice_table_answers();
+
+        let answers = [];
+
+
+        answers.push(...multi_answers);
+        answers.push(...open_answers);
+        answers.push(...open_table_answers);
+        answers.push(...multi_table_answers);
+
+        this._post_answers_to_api(answers, function (data) {
+            if (data) {
+                alert('Saved all answers!');
+            } else {
+                alert('Something went wrong!');
+            }
+        })
+    }
+
+    _post_answers_to_api(answers, callBack) {
+        console.dir(answers);
+        for (let i in answers) {
+            let item = answers[i];
+            this._post_answer_to_api(item.convert, function (data) {
+                console.log(data);
+            })
+        }
+        callBack(true);
+    }
+
+    _post_answer_to_api(answer, callBack) {
+
+        this.WebApp.postAnswer(answer, function (data) {
+            return callBack(data);
+        });
     }
 
     /**
@@ -41,25 +78,62 @@ class Question {
         let open_table = this._check_open_question_table();
 
         if (multi && multi_choice && open && open_table) {
-            let multi_answers = this._retrieve_multiple_choice_answers();
-
+            this._save_items_to_db(false);
         } else {
-            let multi_answers = this._retrieve_multiple_choice_answers();
-            let open_answers = this._retrieve_open_question_answers();
-            let open_table_answers = this._retrieve_open_question_table_answers();
-
-            for (let answer in multi_answers) {
-                console.log(multi_answers[answer].toJSON());
-            }
-            for (let answer in open_answers) {
-                console.log(open_answers[answer].toJSON());
-            }
-
-            console.log("Dir test");
-
-            console.dir(this.openQuestionTableFormList);
-            console.dir(this.multipleChoiceTableFormList);
+            // console.log(multi);
+            // console.log(multi_choice);
+            // console.log(open);
+            // console.log(open_table);
+            //
+            //
+            //
+            // let multi_answers = this._retrieve_multiple_choice_answers();
+            // let open_answers = this._retrieve_open_question_answers();
+            // let open_table_answers = this._retrieve_open_question_table_answers();
+            // let multi_table_answers = this._retrieve_multiple_choice_table_answers();
+            //
+            // let answers = [];
+            //
+            // answers.push.apply(answers, multi_answers);
+            // answers.push.apply(answers, open_answers);
+            // answers.push.apply(answers, open_table_answers);
+            // answers.push.apply(answers, multi_table_answers);
+            // console.dir(answers);
+            // for (let answer in answers) {
+            //     console.log(multi_answers[answer].toJSON());
+            // }
+            alert('Please add the missing answers before saving!')
         }
+    }
+
+    _retrieve_multiple_choice_table_answers() {
+        let list = this.multipleChoiceTableFormList;
+        let answer_list = [];
+        for (let i in list) {
+            let answer = new Answer();
+            answer.inspectorId = this.inspectorId;
+            for (let j in list[i]) {
+                let id = list[i][j];
+                let item = $(`#${id}`);
+
+                answer.questionId = id.split('-')[0];
+
+                let value = item[0].value;
+                let content = answer.getAnswerContent;
+                if (content) {
+                    if (!content.endsWith(';')) {
+                        answer.setAnswerContent = (content + '|' + value)
+                    } else {
+                        answer.setAnswerContent = (content + value)
+                    }
+                } else {
+                    answer.setAnswerContent = (value)
+                }
+            }
+            answer_list.push(answer);
+
+        }
+        return answer_list;
     }
 
     /**
@@ -112,14 +186,14 @@ class Question {
             let answer = new Answer();
             answer.inspectorId = this.inspectorId;
             for (let j = 0; j < list[i].length; j++) {
-                for(let k in list[i][j]) {
+                for (let k in list[i][j]) {
                     let textareaId = list[i][j][k];
                     let item = $(`#${textareaId}`);
                     answer.questionId = textareaId.split('-')[0];
                     let content = answer.getAnswerContent;
                     let value = item[0].value;
-                    if(content) {
-                        if(!content.endsWith(';')){
+                    if (content) {
+                        if (!content.endsWith(';')) {
                             answer.setAnswerContent = (content + '|' + value)
                         } else {
                             answer.setAnswerContent = (content + value)
@@ -127,7 +201,7 @@ class Question {
                     } else {
                         answer.setAnswerContent = (value)
                     }
-                    
+
                 }
                 let content = answer.getAnswerContent;
                 answer.setAnswerContent = (content + ';');
@@ -145,7 +219,10 @@ class Question {
         let amount_of_questions = this.multipleChoiceFormList.length,
             amount_of_checked_buttons = Question._is_selected();
         if (amount_of_questions !== amount_of_checked_buttons) {
-            alert('Please fill out all multiple choice answers.');
+            // alert('Please fill out all multiple choice answers.');
+            return false;
+        } else {
+            return true;
         }
 
     }
@@ -156,14 +233,18 @@ class Question {
      */
     _check_open_questions() {
         let list = this.openQuestionFormList;
+        let check = true;
         for (let i in list) {
             let item = $(`#inputd-${list[i]}`);
             if (!item.val()) {
                 Question._add_color(false, item);
+                check = false;
             } else {
                 Question._add_color(true, item);
             }
         }
+
+        return check;
     }
 
     /**
@@ -199,6 +280,7 @@ class Question {
      */
     _check_open_question_table() {
         let list = this.openQuestionTableFormList;
+        let check = true;
         for (let i in list) {
             for (let j in list[i]) {
                 for (let k in list[i][j]) {
@@ -206,12 +288,15 @@ class Question {
                     let value = item.val();
                     if (!value) {
                         Question._add_color(false, item);
+                        check = false;
                     } else {
                         Question._add_color(true, item);
                     }
                 }
             }
         }
+
+        return check;
     }
 
     /**

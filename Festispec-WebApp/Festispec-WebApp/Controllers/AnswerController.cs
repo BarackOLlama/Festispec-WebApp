@@ -28,7 +28,6 @@ namespace Festispec_WebApp.Controllers
         [HttpPost]
         public IActionResult AnswerQuestion([FromBody] AnswerDto answerDto)
         {
-            
             return Ok(_answerService.Save(answerDto));
         }
     }

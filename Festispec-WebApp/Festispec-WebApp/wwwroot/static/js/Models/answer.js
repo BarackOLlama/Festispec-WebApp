@@ -23,12 +23,15 @@ class Answer {
         this._questionId = value;
     }
 
-    toJSON() {
-        return {
-            'Content': this.getAnswerContent,
-            'QuestionId': this.questionId,
-            'InspectorId': this.inspectorId,
-        }
+    get convert() {
+        let list = [{
+            'Id': 1,
+            'Content': this._answerContent,
+            'QuestionId': this._questionId,
+            'InspectorId': this._inspector_id
+        }];
+        
+        return JSON.stringify(list);
     }
 
     constructor(questionId, answerContent, inspectorId) {
