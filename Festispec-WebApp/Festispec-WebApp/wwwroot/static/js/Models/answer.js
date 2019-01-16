@@ -24,14 +24,13 @@ class Answer {
     }
 
     get convert() {
-        let list = [{
-            'Id': 1,
+        let list = {
             'Content': this._answerContent,
             'QuestionId': this._questionId,
             'InspectorId': this._inspector_id
-        }];
+        };
         
-        return JSON.stringify(list);
+        return (list);
     }
 
     constructor(questionId, answerContent, inspectorId) {

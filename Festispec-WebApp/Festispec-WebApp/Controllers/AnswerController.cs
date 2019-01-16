@@ -26,7 +26,7 @@ namespace Festispec_WebApp.Controllers
         
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult AnswerQuestion([FromBody] AnswerDto answerDto)
+        public IActionResult AnswerQuestion([FromBody]AnswerDto answerDto)
         {
             return Ok(_answerService.Save(answerDto));
         }

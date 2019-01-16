@@ -9,7 +9,6 @@ class Question {
         this.inspectorId = getCookie("inspector");
         this.inspectionId = inspectionId;
         this.WebApp = new WebApp();
-        this.formList = [];
         this.multipleChoiceFormList = [];
         this.openQuestionFormList = [];
         this.openQuestionTableFormList = [];
@@ -80,28 +79,6 @@ class Question {
         if (multi && multi_choice && open && open_table) {
             this._save_items_to_db(false);
         } else {
-            // console.log(multi);
-            // console.log(multi_choice);
-            // console.log(open);
-            // console.log(open_table);
-            //
-            //
-            //
-            // let multi_answers = this._retrieve_multiple_choice_answers();
-            // let open_answers = this._retrieve_open_question_answers();
-            // let open_table_answers = this._retrieve_open_question_table_answers();
-            // let multi_table_answers = this._retrieve_multiple_choice_table_answers();
-            //
-            // let answers = [];
-            //
-            // answers.push.apply(answers, multi_answers);
-            // answers.push.apply(answers, open_answers);
-            // answers.push.apply(answers, open_table_answers);
-            // answers.push.apply(answers, multi_table_answers);
-            // console.dir(answers);
-            // for (let answer in answers) {
-            //     console.log(multi_answers[answer].toJSON());
-            // }
             alert('Please add the missing answers before saving!')
         }
     }

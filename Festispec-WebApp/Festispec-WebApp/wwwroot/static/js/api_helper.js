@@ -39,11 +39,12 @@ class WebApp {
          * @param cb CallBack method
          */
         $.ajax({
-            type: 'POST',
-            url: '/api/Answer',
+            type: "POST",
+            accepts: "application/json",
             contentType: "application/json",
+            url: '/api/Answer',
             dataType: "json",
-            body: answer,
+            data: JSON.stringify(answer),
             success: function (data) {
                 return callBack(data);
             },
