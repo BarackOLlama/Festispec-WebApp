@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Festispec_WebApp.Models;
@@ -53,9 +54,9 @@ namespace Festispec_WebApp.Services
         private IEnumerable<int> GetInspectionIdsByInspectorId(int inspectorId)
         {
             var inspections = _context.InspectionInspectors
+                .Where(a => a.InspectorId == inspectorId)
                 .Include(a => a.Inspection.InspectionDate)
                 .Include(a => a.Inspection.Event)
-                .Where(a => a.InspectorId == inspectorId)
                 .Select(a => a.Inspection.Id);
             return inspections;
         }
@@ -78,6 +79,7 @@ namespace Festispec_WebApp.Services
             {
                 return null;
             }
+            
             var inspection = _context.Inspections.Include(inspections => inspections.InspectionInspectors)
                 .ThenInclude(inspectors => inspectors.Inspector)
                 .Include(inspections => inspections.Event)
