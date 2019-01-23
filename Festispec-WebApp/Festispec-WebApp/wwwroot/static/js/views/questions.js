@@ -11,16 +11,52 @@ class Question {
         this.WebApp = new WebApp();
         this.multipleChoiceFormList = [];
         this.openQuestionFormList = [];
+        this.rangeQuestionFormList = [];
         this.openQuestionTableFormList = [];
         this.multipleChoiceTableFormList = [];
 
         this.multipleChoiceType = "Multiple Choice vraag";
         this.multipleChoiceTableType = "Multiple Choice Tabelvraag";
         this.openQuestionType = "Open Vraag";
+        this.rangeQuestionType = "Schaal Vraag";
         this.openQuestionTableType = "Open Tabelvraag";
 
         // Add events (buttons etc)
         new Events(this, HTML_PAGE);
+    }
+
+    /**
+     * Adds a colored border to an input field
+     * @param accepted
+     * @param item
+     * @private
+     */
+    static _add_color(accepted, item) {
+        if (accepted) {
+            $(item).addClass("green-border");
+        } else {
+            $(item).addClass("red-border");
+            $(item).focus();
+        }
+    }
+
+    /**
+     * Counts all the radiobuttons that are selected, returns the value
+     * Match the value with the amount of radiobutton questions, and we know
+     * if all the radio button forms are filled.
+     * @returns {number}
+     * @private
+     */
+    static _is_selected() {
+        let checked_buttons = 0;
+        let radios = document.getElementsByTagName('input');
+        for (let i = 0; i < radios.length; i++) {
+            if (radios[i].type === 'radio' && radios[i].checked) {
+                checked_buttons++;
+            }
+        }
+
+        return checked_buttons;
     }
 
     _save_items_to_db(save) {
@@ -151,6 +187,21 @@ class Question {
 
         return answer_list;
     }
+    /**
+     * Retrieves all questions of this type.
+     * @private
+     */
+    _retrieve_open_question_answers() {
+        let list = this.openQuestionFormList;
+        let answer_list = [];
+        for (let i in list) {
+            let item = $(`#inputd-${list[i]}`);
+            let answer = new Answer(item[0].dataset.type, item.val(), this.inspectorId);
+            answer_list.push(answer);
+        }
+
+        return answer_list;
+    }
 
     /**
      * Retrieves all questions of this type.
@@ -223,6 +274,25 @@ class Question {
 
         return check;
     }
+    /**
+     * Checks if all questions of this type are answered.
+     * @private
+     */
+    _check_ranged_questions() {
+        let list = this.openQuestionFormList;
+        let check = true;
+        for (let i in list) {
+            let item = $(`#inputd-${list[i]}`);
+            if (!item.val()) {
+                Question._add_color(false, item);
+                check = false;
+            } else {
+                Question._add_color(true, item);
+            }
+        }
+
+        return check;
+    }
 
     /**
      * Checks if all questions of this type are answered.
@@ -281,6 +351,7 @@ class Question {
      */
     render_question_data() {
         this._get_questions(questions => {
+            console.log(questions);
             this._build_question_list(questions);
         })
     }
@@ -356,6 +427,19 @@ class Question {
                             .append(
                                 this._build_open_question_table(question.id, question.columns)
                             )
+                    );
+
+            case this.rangeQuestionType:
+                return $(`<ul style="list-style: none" id=${question.id}>`)
+                    .append(
+                        $('<li>')
+                            .append(
+                                question.content
+                            ),
+                        $('<li>')
+                            .append(
+                                this._build_range_question(question)
+                            )
                     )
         }
 
@@ -384,6 +468,37 @@ class Question {
         return content;
     }
 
+    /**
+     * Build's an ranged question and returns valid HTML
+     * @param question
+     * @returns {jQuery.fn.init|jQuery|HTMLElement}
+     * @private
+     */
+    _build_range_question(question) {
+        let content;
+        let form_id = `form_${question.id}`;
+        let options = question.options;
+        let min_range = options.split(':')[0];
+        let max_range = options.split(':')[1];
+        let text1 = options.split(':')[2];
+        let text2 = options.split(':')[3];
+        let form = $(`<form id="${form_id}" data-type="multiple">`);
+        let label = `<label> ${text1} -> ${text2} </label>`;
+        let item = `<input type="range" autocomplete="off" min="${min_range}"  max="${max_range}" 
+id="inputd-${question.id}" data-type="${question.id}" name="question" style="margin-bottom:10px" 
+class="form-control col-md-12" />`;
+        let temp = $('<li>').append(
+            label,
+            item
+        );
+        form.append(temp);
+
+        content = form;
+        this.rangeQuestionFormList.push(`${question.id}`);
+
+
+        return content;
+    }
 
     /**
      * Build's a table with multiple choice text questions and returns valid HTML
@@ -397,7 +512,9 @@ class Question {
         if (!columns) {
             return;
         }
-        let ul = $(`<ul style="list-style: none" id=open_${question_id}>`);
+
+        let form = $(`<form id="open_${question_id}">`);
+        // let ul = $(`<ul style="list-style: none" id=open_${question_id}>`);
 
         let fields = options.split(';');
         let available_answers_to_fill = [];
@@ -405,7 +522,7 @@ class Question {
             let option = fields[i].split('|');
 
             available_answers_to_fill.push(option[0].toLowerCase());
-            ul.append(
+            form.append(
                 $('<li>').append(
                     `${option[0]}: ${option[1]}`
                 )
@@ -455,12 +572,12 @@ class Question {
             this.multipleChoiceTableFormList.push(question_textboxes);
             table.appendChild(row);
         }
-        ul.append(
+        form.append(
             $('<li>').append(
                 table
             )
         );
-        return ul;
+        return form;
 
     }
 
@@ -566,41 +683,6 @@ class Question {
             }
             return cb(questionnaire);
         })
-    }
-
-
-    /**
-     * Adds a colored border to an input field
-     * @param accepted
-     * @param item
-     * @private
-     */
-    static _add_color(accepted, item) {
-        if (accepted) {
-            $(item).addClass("green-border");
-        } else {
-            $(item).addClass("red-border");
-            $(item).focus();
-        }
-    }
-
-    /**
-     * Counts all the radiobuttons that are selected, returns the value
-     * Match the value with the amount of radiobutton questions, and we know
-     * if all the radio button forms are filled.
-     * @returns {number}
-     * @private
-     */
-    static _is_selected() {
-        let checked_buttons = 0;
-        let radios = document.getElementsByTagName('input');
-        for (let i = 0; i < radios.length; i++) {
-            if (radios[i].type === 'radio' && radios[i].checked) {
-                checked_buttons++;
-            }
-        }
-
-        return checked_buttons;
     }
 }
 

@@ -36,6 +36,7 @@ namespace Festispec_WebApp.Services
                 .Include(inspections => inspections.Questionnaires)
                 .Include(inspections => inspections.Quotations)
                 .ToList();
+            
             return ins;
         }
 
