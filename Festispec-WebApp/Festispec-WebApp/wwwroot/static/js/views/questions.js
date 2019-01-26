@@ -59,6 +59,13 @@ class Question {
         return checked_buttons;
     }
 
+    debug(item, id) {
+        console.dir({
+            'id': id,
+            'item': item
+        })
+    }
+
     _save_items_to_db(save) {
         let multi_answers = this._retrieve_multiple_choice_answers();
         let open_answers = this._retrieve_open_question_answers();
@@ -187,6 +194,7 @@ class Question {
 
         return answer_list;
     }
+
     /**
      * Retrieves all questions of this type.
      * @private
@@ -274,6 +282,7 @@ class Question {
 
         return check;
     }
+
     /**
      * Checks if all questions of this type are answered.
      * @private
@@ -478,10 +487,13 @@ class Question {
         let content;
         let form_id = `form_${question.id}`;
         let options = question.options;
-        let min_range = options.split(':')[0];
-        let max_range = options.split(':')[1];
-        let text1 = options.split(':')[2];
-        let text2 = options.split(':')[3];
+        this.debug(options, 1);
+        let min_range = options.split(';')[0].split('|')[1];
+        let max_range = options.split(';')[1].split('|')[1];
+        this.debug(min_range, 2)
+        this.debug(max_range, 3)
+        let text1 = options.split('|')[0];
+        let text2 = options.split(';')[1].split('|')[0];
         let form = $(`<form id="${form_id}" data-type="multiple">`);
         let label = `<label> ${text1} -> ${text2} </label>`;
         let item = `<input type="range" autocomplete="off" min="${min_range}"  max="${max_range}" 
