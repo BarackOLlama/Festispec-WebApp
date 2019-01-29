@@ -72,7 +72,7 @@ class Question {
         let open_table_answers = this._retrieve_open_question_table_answers();
         let multi_table_answers = this._retrieve_multiple_choice_table_answers();
         let ranged_answers = this._retrieve_range_question_answers();
-        
+
         this.debug(ranged_answers, 12);
         let answers = [];
 
@@ -83,13 +83,15 @@ class Question {
         answers.push(...multi_table_answers);
         answers.push(...ranged_answers);
 
-        this._post_answers_to_api(answers, function (data) {
-            if (data) {
-                alert('Saved all answers!');
-            } else {
-                alert('Something went wrong!');
-            }
-        })
+        if (save) {
+            this._post_answers_to_api(answers, function (data) {
+                if (data) {
+                    alert('Saved all answers!');
+                } else {
+                    alert('Something went wrong!');
+                }
+            })
+        }
     }
 
     _post_answers_to_api(answers, callBack) {
@@ -109,6 +111,7 @@ class Question {
             return callBack(data);
         });
     }
+
     /**
      * Retrieves all questions of this type.
      * @private
@@ -124,6 +127,7 @@ class Question {
 
         return answer_list;
     }
+
     /**
      * Check to make sure the questionnaire is answered as a whole.
      * @private
@@ -137,7 +141,7 @@ class Question {
         let open_table = this._check_open_question_table();
 
         if (multi && multi_choice && open && open_table) {
-            this._save_items_to_db(false);
+            this._save_items_to_db(true);
         } else {
             alert('Please add the missing answers before saving!')
         }
@@ -195,7 +199,6 @@ class Question {
 
         return answer_list;
     }
-
 
 
     /**
@@ -476,7 +479,7 @@ class Question {
         let text2 = options.split(';')[1].split('|')[0];
         let form = $(`<form id="${form_id}" data-type="multiple">`);
         let label = `<label> ${text1} -> ${text2} </label>`;
-        
+
         let item = `<input type="range" autocomplete="off" min="${min_range}"  max="${max_range}" 
         id="inputd-${question.id}" data-type="${question.id}" name="question" style="margin-bottom:10px" 
         class="form-control col-md-12" />`;
