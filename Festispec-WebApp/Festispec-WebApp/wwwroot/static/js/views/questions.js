@@ -71,7 +71,9 @@ class Question {
         let open_answers = this._retrieve_open_question_answers();
         let open_table_answers = this._retrieve_open_question_table_answers();
         let multi_table_answers = this._retrieve_multiple_choice_table_answers();
-
+        let ranged_answers = this._retrieve_range_question_answers();
+        
+        this.debug(ranged_answers, 12);
         let answers = [];
 
 
@@ -79,6 +81,7 @@ class Question {
         answers.push(...open_answers);
         answers.push(...open_table_answers);
         answers.push(...multi_table_answers);
+        answers.push(...ranged_answers);
 
         this._post_answers_to_api(answers, function (data) {
             if (data) {
@@ -106,7 +109,21 @@ class Question {
             return callBack(data);
         });
     }
+    /**
+     * Retrieves all questions of this type.
+     * @private
+     */
+    _retrieve_range_question_answers() {
+        let list = this.rangeQuestionFormList;
+        let answer_list = [];
+        for (let i in list) {
+            let item = $(`#inputd-${list[i]}`);
+            let answer = new Answer(item[0].dataset.type, item.val(), this.inspectorId);
+            answer_list.push(answer);
+        }
 
+        return answer_list;
+    }
     /**
      * Check to make sure the questionnaire is answered as a whole.
      * @private
@@ -179,21 +196,7 @@ class Question {
         return answer_list;
     }
 
-    /**
-     * Retrieves all questions of this type.
-     * @private
-     */
-    _retrieve_open_question_answers() {
-        let list = this.openQuestionFormList;
-        let answer_list = [];
-        for (let i in list) {
-            let item = $(`#inputd-${list[i]}`);
-            let answer = new Answer(item[0].dataset.type, item.val(), this.inspectorId);
-            answer_list.push(answer);
-        }
 
-        return answer_list;
-    }
 
     /**
      * Retrieves all questions of this type.
@@ -268,26 +271,6 @@ class Question {
      * @private
      */
     _check_open_questions() {
-        let list = this.openQuestionFormList;
-        let check = true;
-        for (let i in list) {
-            let item = $(`#inputd-${list[i]}`);
-            if (!item.val()) {
-                Question._add_color(false, item);
-                check = false;
-            } else {
-                Question._add_color(true, item);
-            }
-        }
-
-        return check;
-    }
-
-    /**
-     * Checks if all questions of this type are answered.
-     * @private
-     */
-    _check_ranged_questions() {
         let list = this.openQuestionFormList;
         let check = true;
         for (let i in list) {
@@ -495,8 +478,8 @@ class Question {
         let label = `<label> ${text1} -> ${text2} </label>`;
         
         let item = `<input type="range" autocomplete="off" min="${min_range}"  max="${max_range}" 
-id="inputd-${question.id}" data-type="${question.id}" name="question" style="margin-bottom:10px" 
-class="form-control col-md-12" />`;
+        id="inputd-${question.id}" data-type="${question.id}" name="question" style="margin-bottom:10px" 
+        class="form-control col-md-12" />`;
         let temp = $('<li>').append(
             label,
             item
