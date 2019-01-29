@@ -487,15 +487,13 @@ class Question {
         let content;
         let form_id = `form_${question.id}`;
         let options = question.options;
-        this.debug(options, 1);
         let min_range = options.split(';')[0].split('|')[1];
         let max_range = options.split(';')[1].split('|')[1];
-        this.debug(min_range, 2)
-        this.debug(max_range, 3)
         let text1 = options.split('|')[0];
         let text2 = options.split(';')[1].split('|')[0];
         let form = $(`<form id="${form_id}" data-type="multiple">`);
         let label = `<label> ${text1} -> ${text2} </label>`;
+        
         let item = `<input type="range" autocomplete="off" min="${min_range}"  max="${max_range}" 
 id="inputd-${question.id}" data-type="${question.id}" name="question" style="margin-bottom:10px" 
 class="form-control col-md-12" />`;
@@ -524,7 +522,6 @@ class="form-control col-md-12" />`;
         if (!columns) {
             return;
         }
-
         let form = $(`<form id="open_${question_id}">`);
         // let ul = $(`<ul style="list-style: none" id=open_${question_id}>`);
 
@@ -541,7 +538,7 @@ class="form-control col-md-12" />`;
             )
         }
 
-        let rows = columns.split('|');
+        let rows = columns.split(';');
         let rowCount = rows[0];
 
         let table = document.createElement("table");
@@ -604,7 +601,7 @@ class="form-control col-md-12" />`;
         if (!columns) {
             return;
         }
-        let rows = columns.split('|');
+        let rows = columns.split(';');
         let rowCount = rows[0];
 
         let table = document.createElement("table");
