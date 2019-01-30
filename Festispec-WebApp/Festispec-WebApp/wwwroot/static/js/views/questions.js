@@ -407,7 +407,11 @@ class Question {
                             ),
                         $('<li>')
                             .append(
-                                this._build_open_multi_choice_answer_table(question.id, question.columns, question.options)
+                                this._build_open_multi_choice_answer_table(
+                                    question.id,
+                                    question.columns,
+                                    question.options
+                                )
                             )
                     );
 
@@ -450,7 +454,8 @@ class Question {
         let content;
         let form_id = `form_${question_id}`;
         let form = $(`<form id="${form_id}" data-type="multiple">`);
-        let item = `<input type="text" autocomplete="off" id="inputd-${question_id}" data-type="${question_id}" name="question" style="margin-bottom:10px" class="form-control col-md-12" placeholder="Tekst hier.."/>`;
+        let item = `<input type="text" autocomplete="off" id="inputd-${question_id}" data-type="${question_id}" 
+        name="question" style="margin-bottom:10px" class="form-control col-md-12" placeholder="Tekst hier.."/>`;
         let temp = $('<li>').append(
             item
         );
@@ -652,7 +657,9 @@ class Question {
                 let sliced_option_name = fields[option].split('|')[0];
                 let sliced_option_text = fields[option].split('|')[1];
                 let item_id = `${question_id}_${sliced_option_name}`;
-                let item = `<input type="radio" data-type="${sliced_option_name}" data-question="${question_id}" id="${item_id}" name="group_${question_id}"/><span id="input-${question_id}">${sliced_option_text}</span>`;
+                let item = `<input type="radio" data-type="${sliced_option_name}" data-question="${question_id}"
+                id="${item_id}" 
+                name="group_${question_id}"/> <span id="input-${question_id}">${sliced_option_text}</span>`;
                 let temp = $('<li>').append(
                     item
                 );
