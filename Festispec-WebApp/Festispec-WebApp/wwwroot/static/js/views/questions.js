@@ -260,12 +260,7 @@ class Question {
     _check_multiple_choice() {
         let amount_of_questions = this.multipleChoiceFormList.length,
             amount_of_checked_buttons = Question._is_selected();
-        if (amount_of_questions !== amount_of_checked_buttons) {
-            // alert('Please fill out all multiple choice answers.');
-            return false;
-        } else {
-            return true;
-        }
+        return amount_of_questions === amount_of_checked_buttons;
 
     }
 
