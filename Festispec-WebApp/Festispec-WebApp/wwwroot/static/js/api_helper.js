@@ -107,6 +107,26 @@ class WebApp {
             }
         });
     }
+    
+    getFinishedInspections(callBack) {
+        /**
+         * Sends get request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        let id = this.CurrentInspectorId;
+        $.ajax({
+            type: 'GET',
+            url: `/api/Inspections/inspector/${id}`,
+            success: function (data) {
+                console.log(data);
+                return callBack(data);
+            }
+        });
+    }
+    
     getInspection(InspectionId, callBack) {
         /**
          * Sends get request to target, receives response

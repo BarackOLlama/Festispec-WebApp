@@ -13,6 +13,7 @@ namespace Festispec_WebApp.Services
         Inspections GetById(int id);
         Inspections GetByAccountId(int id);
         IEnumerable<Inspections> GetInspectionsByInspectorId(int inspectorId);
+        IEnumerable<Inspections> GetFinishedInspectionsByInspectorId(int inspectorId);
         IEnumerable<InspectionDates> Test();
     }
 
@@ -36,7 +37,7 @@ namespace Festispec_WebApp.Services
                 .Include(inspections => inspections.Questionnaires)
                 .Include(inspections => inspections.Quotations)
                 .ToList();
-            
+
             return ins;
         }
 
@@ -70,17 +71,18 @@ namespace Festispec_WebApp.Services
 
             return inspector;
         }
+
         public IEnumerable<Inspections> GetInspectionsByInspectorId(int inspectorId)
         {
             inspectorId = GetInspectorIdBasedOnAccountId(inspectorId);
-            
-            IEnumerable <int> idList = GetInspectionIdsByInspectorId(inspectorId);
+
+            IEnumerable<int> idList = GetInspectionIdsByInspectorId(inspectorId);
             var list = idList.ToList();
             if (!list.Any())
             {
                 return null;
             }
-            
+
             var inspection = _context.Inspections.Include(inspections => inspections.InspectionInspectors)
                 .ThenInclude(inspectors => inspectors.Inspector)
                 .Include(inspections => inspections.Event)
@@ -92,12 +94,39 @@ namespace Festispec_WebApp.Services
                 .ToList();
             return inspection;
         }
-        
+
+        public IEnumerable<Inspections> GetFinishedInspectionsByInspectorId(int inspectorId)
+        {
+            inspectorId = GetInspectorIdBasedOnAccountId(inspectorId);
+
+            IEnumerable<int> idList = GetInspectionIdsByInspectorId(inspectorId);
+            var list = idList.ToList();
+            if (!list.Any())
+            {
+                return null;
+            }
+
+            List<Inspections> inspection = _context.Inspections.Include(inspections => inspections.InspectionInspectors)
+                .ThenInclude(inspectors => inspectors.Inspector)
+                .Include(inspections => inspections.Event)
+                .Include(inspections => inspections.Status)
+                .Include(inspections => inspections.InspectionDate)
+                .Include(inspections => inspections.Questionnaires)
+                .Include(inspections => inspections.Quotations)
+                .Where(a => list.Contains(a.Id))
+                .ToList();
+
+           
+
+            return inspection;
+        }
+
         public IEnumerable<InspectionDates> Test()
         {
             var dats = _context.InspectionDates.ToList();
             return dats;
         }
+
         public Inspections GetByAccountId(int id)
         {
             throw new System.NotImplementedException();

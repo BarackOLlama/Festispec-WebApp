@@ -57,6 +57,17 @@ namespace Festispec_WebApp.Controllers
                 return NoContent();
             }
             return Ok(inspection);
+        } 
+        [AllowAnonymous]
+        [HttpGet("finished/{id}")]
+        public IActionResult GetFinishedInspectionsByInspectorId(int id)
+        {
+            var inspection = _inspectionService.GetInspectionsByInspectorId(id);
+            if (inspection.IsNullOrEmpty())
+            {
+                return NoContent();
+            }
+            return Ok(inspection);
         }
         
     }
