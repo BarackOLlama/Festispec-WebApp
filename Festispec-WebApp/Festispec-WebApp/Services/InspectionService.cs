@@ -13,7 +13,7 @@ namespace Festispec_WebApp.Services
         Inspections GetById(int id);
         Inspections GetByAccountId(int id);
         IEnumerable<Inspections> GetInspectionsByInspectorId(int inspectorId);
-        IEnumerable<Inspections> GetFinishedInspectionsByInspectorId(int inspectorId);
+        List<int> GetFinishedInspectionsByInspectorId(int inspectorId);
         IEnumerable<InspectionDates> Test();
     }
 
@@ -85,6 +85,7 @@ namespace Festispec_WebApp.Services
 
             var inspection = _context.Inspections.Include(inspections => inspections.InspectionInspectors)
                 .ThenInclude(inspectors => inspectors.Inspector)
+                .ThenInclude(i => i.Answers)
                 .Include(inspections => inspections.Event)
                 .Include(inspections => inspections.Status)
                 .Include(inspections => inspections.InspectionDate)
@@ -95,7 +96,7 @@ namespace Festispec_WebApp.Services
             return inspection;
         }
 
-        public IEnumerable<Inspections> GetFinishedInspectionsByInspectorId(int inspectorId)
+        public List<int> GetFinishedInspectionsByInspectorId(int inspectorId)
         {
             inspectorId = GetInspectorIdBasedOnAccountId(inspectorId);
 
@@ -106,17 +107,13 @@ namespace Festispec_WebApp.Services
                 return null;
             }
 
-            List<Inspections> inspection = _context.Inspections.Include(inspections => inspections.InspectionInspectors)
-                .ThenInclude(inspectors => inspectors.Inspector)
-                .Include(inspections => inspections.Event)
-                .Include(inspections => inspections.Status)
-                .Include(inspections => inspections.InspectionDate)
-                .Include(inspections => inspections.Questionnaires)
-                .Include(inspections => inspections.Quotations)
-                .Where(a => list.Contains(a.Id))
-                .ToList();
-
-           
+            List<int> inspection = _context.InspectionInspectors
+                .Include(a => a.Inspection)
+                .Include(a => a.Inspector)
+                .ThenInclude(a => a.Answers.Where())
+                .Where(a => a.InspectorId == inspectorId)
+                .Select(i => i.InspectorId).ToList();
+        
 
             return inspection;
         }
