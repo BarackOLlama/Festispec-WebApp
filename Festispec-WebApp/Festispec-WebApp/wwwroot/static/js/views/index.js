@@ -29,12 +29,13 @@ class Index {
                 for (let index in inspectorData) {
                     let a = document.createElement('a');
                     a.id = inspectorData[index].id;
-                    a.style.color = "red";
+                    a.style.color = "blue";
                     a.style.hover = "cursor: pointer;";
                     a.addEventListener('click', function () {
                         Index.start_inspection(inspectorData[index].id);
                     });
-                    a.innerHTML = inspectorData[index].name;
+                    a.innerHTML = "Start inspectie";
+                    console.dir(inspectorData[index]);
                     // Add item to selected <ul>
                     target_ul.append(
                         // Add <li> to ul (list element)
@@ -43,8 +44,16 @@ class Index {
                                 // Call the current list index (The list contains objects, in this case 2 inspector objects)
                                 // So we need to for through the list (which we do above, in the for loop), and call the object attribute (or object functions, lists etc)
                                 $('<li>').append(
-                                    inspectorData[index].id
+                                    inspectorData[index].name, `<br /> ${inspectorData[index].inspectionDate.startDate.split('T')[0]}
+                                    - ${inspectorData[index].inspectionDate.endDate.split('T')[0]} <br />`,
+                                    `${inspectorData[index].inspectionDate.startTime} - ${inspectorData[index].inspectionDate.endTime}`
                                 ),
+                                $('<li>').append(
+                                    inspectorData[index].event.address, '<br />',
+                                    inspectorData[index].event.city, '<br />',
+                                    inspectorData[index].event.zipcode
+                                ),
+
                                 $('<li style="cursor: pointer;">').append(
                                     a
                                 )
