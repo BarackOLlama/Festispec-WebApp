@@ -29,6 +29,8 @@ class Index {
                 for (let index in inspectorData) {
                     let a = document.createElement('a');
                     a.id = inspectorData[index].id;
+                    a.style.color = "red";
+                    a.style.hover = "cursor: pointer;";
                     a.addEventListener('click', function () {
                         Index.start_inspection(inspectorData[index].id);
                     });
@@ -43,7 +45,7 @@ class Index {
                                 $('<li>').append(
                                     inspectorData[index].id
                                 ),
-                                $('<li>').append(
+                                $('<li style="cursor: pointer;">').append(
                                     a
                                 )
                             )

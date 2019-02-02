@@ -110,7 +110,7 @@ namespace Festispec_WebApp.Services
             List<int> inspection = _context.InspectionInspectors
                 .Include(a => a.Inspection)
                 .Include(a => a.Inspector)
-                .ThenInclude(a => a.Answers.Where())
+                .ThenInclude(a => a.Answers)
                 .Where(a => a.InspectorId == inspectorId)
                 .Select(i => i.InspectorId).ToList();
         
