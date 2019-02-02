@@ -553,6 +553,9 @@ class Question {
                 textarea.id = input_id;
                 textarea.setAttribute('cols', '40');
                 textarea.className = "form-control";
+                textarea.addEventListener('paste', function (e) {
+                    e.preventDefault();
+                }.bind(this));
                 textarea.addEventListener('input', function (t) {
                     if (available_answers_to_fill.includes(t.data.toLowerCase())) {
                         textarea.value = t.data;
