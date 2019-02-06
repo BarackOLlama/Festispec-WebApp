@@ -8,7 +8,7 @@ namespace Festispec_WebApp.Models
         public Inspectors()
         {
             Answers = new HashSet<Answers>();
-            Availabilities = new HashSet<Availabilities>();
+            ScheduleItems = new HashSet<ScheduleItems>();
             InspectionInspectors = new HashSet<InspectionInspectors>();
         }
 
@@ -27,7 +27,7 @@ namespace Festispec_WebApp.Models
 
         public virtual Accounts Account { get; set; }
         public virtual ICollection<Answers> Answers { get; set; }
-        public virtual ICollection<Availabilities> Availabilities { get; set; }
+        public virtual ICollection<ScheduleItems> ScheduleItems { get; set; }
         public virtual ICollection<InspectionInspectors> InspectionInspectors { get; set; }
     }
 }

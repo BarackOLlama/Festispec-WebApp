@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Festispec_WebApp.Models
 {
-    public partial class Availabilities
+    public partial class ScheduleItems
     {
         public int Id { get; set; }
         public DateTime? Date { get; set; }

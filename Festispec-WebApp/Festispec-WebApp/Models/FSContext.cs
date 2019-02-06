@@ -17,7 +17,7 @@ namespace Festispec_WebApp.Models
 
         public virtual DbSet<Accounts> Accounts { get; set; }
         public virtual DbSet<Answers> Answers { get; set; }
-        public virtual DbSet<Availabilities> Availabilities { get; set; }
+        public virtual DbSet<ScheduleItems> ScheduleItems { get; set; }
         public virtual DbSet<Contacts> Contacts { get; set; }
         public virtual DbSet<Customers> Customers { get; set; }
         public virtual DbSet<EventDates> EventDates { get; set; }
@@ -78,7 +78,7 @@ namespace Festispec_WebApp.Models
                     .HasConstraintName("FK_dbo.Answers_dbo.Questions_QuestionId");
             });
 
-            modelBuilder.Entity<Availabilities>(entity =>
+            modelBuilder.Entity<ScheduleItems>(entity =>
             {
                 entity.HasIndex(e => e.InspectorId)
                     .HasName("IX_InspectorId");
@@ -86,9 +86,9 @@ namespace Festispec_WebApp.Models
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Inspector)
-                    .WithMany(p => p.Availabilities)
+                    .WithMany(p => p.ScheduleItems)
                     .HasForeignKey(d => d.InspectorId)
-                    .HasConstraintName("FK_dbo.Availabilities_dbo.Inspectors_InspectorId");
+                    .HasConstraintName("FK_dbo.ScheduleItems.Inspectors_InspectorId");
             });
 
             modelBuilder.Entity<Contacts>(entity =>

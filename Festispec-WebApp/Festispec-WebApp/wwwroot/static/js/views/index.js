@@ -35,7 +35,20 @@ class Index {
                         Index.start_inspection(inspectorData[index].id);
                     });
                     a.innerHTML = "Start inspectie";
-                    console.dir(inspectorData[index]);
+
+                    let maps_link = document.createElement('a');
+                    maps_link.style.color = "blue";
+                    maps_link.style.hover = "cursor: pointer;";
+                    maps_link.innerHTML = "Laat zien op Maps";
+                    
+                    
+                    let street = inspectorData[index].event.address.split(" ")[0];
+                    let number = inspectorData[index].event.address.split(" ")[1];
+                    
+                    let total = `${street}+${number}`;
+
+                    maps_link.href = `https://www.google.com/maps/place/${total},+${inspectorData[index].event.zipcode}+${inspectorData[index].event.city}`;
+
                     // Add item to selected <ul>
                     target_ul.append(
                         // Add <li> to ul (list element)
@@ -52,6 +65,10 @@ class Index {
                                     inspectorData[index].event.address, '<br />',
                                     inspectorData[index].event.city, '<br />',
                                     inspectorData[index].event.zipcode
+                                ),
+
+                                $('<li style="cursor: pointer;">').append(
+                                    maps_link
                                 ),
 
                                 $('<li style="cursor: pointer;">').append(

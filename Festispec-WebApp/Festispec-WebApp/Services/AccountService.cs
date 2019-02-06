@@ -58,6 +58,7 @@ namespace Festispec_WebApp.Services
         public Accounts GetById(int id)
         {
             return _context.Accounts.Include(c => c.Inspectors)
+                .ThenInclude(a => a.ScheduleItems)
                 .FirstOrDefault(a => a.Id == id);
         }
 
