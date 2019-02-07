@@ -89,7 +89,7 @@ class Question {
                 if (data) {
                     alert('Saved all answers!');
                     save.WebApp.saveInspectionFinishedToCookie(save.inspectionId);
-                    console.log(save.WebApp.checkIfInspectionIsDone(save.inspectionId));
+                    window.location.href = 'index.html';
                 } else {
                     alert('Something went wrong!');
                 }
