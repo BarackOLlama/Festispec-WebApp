@@ -498,7 +498,7 @@ class Question {
 
         return content;
     }
-
+    static isOdd(num) { return num % 2;}
     /**
      * Build's a table with multiple choice text questions and returns valid HTML
      * @param question_id
@@ -559,13 +559,17 @@ class Question {
                 textarea.addEventListener('paste', function (e) {
                     e.preventDefault();
                 }.bind(this));
-                textarea.addEventListener('input', function (t) {
-                    if (available_answers_to_fill.includes(t.data.toLowerCase())) {
-                        textarea.value = t.data;
-                    } else {
-                        textarea.value = '';
-                    }
-                }.bind(this));
+                let check = Question.isOdd(j);
+                if(check === 0) {
+                    textarea.addEventListener('input', function (t) {
+                        if (available_answers_to_fill.includes(t.data.toLowerCase())) {
+                            textarea.value = t.data;
+                        } else {
+                            textarea.value = '';
+                        }
+                    }.bind(this));
+                }
+
                 column.appendChild(textarea);
                 row.appendChild(column);
                 question_textboxes.push(input_id);
