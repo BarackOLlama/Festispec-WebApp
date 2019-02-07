@@ -5,6 +5,7 @@
     <link href="static/css/BasePage.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"/>
     <link href="static/css/index.css" rel="stylesheet"/>
+    <link href="static/css/Packages/bootstrap-datepicker.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>
@@ -27,7 +28,7 @@
                             <a href="index.html">Home</a>
                         </li>
                         <li>
-                            <a href="map.html">Map</a>
+                            <a href="schedule.html">Aanwezigheid</a>
                         </li>
                     </ul>
                 </li>
@@ -52,21 +53,24 @@
         </div>
     </nav>
 </div>
-<div class="mainIndexContainer">
-    <div class="mainContent-index">
-        <div class="InspectionHeader">
-            <h2>
-                Inspections:
-            </h2>
-        </div>
-        <div class="container">
-            <hr/>
-            <ul class="text-center h5" id="test_cj">
-
-            </ul>
+<center>
+    <div class="mainIndexContainer">
+        <div class="mainContent-index">
+            <div class="InspectionHeader">
+                <h2>
+                    Afmelden:
+                </h2>
+            </div>
+            <div class="container">
+                <hr/>
+                <label>
+                    <input class="datepicker"/>
+                    <input id="submit" type="submit">
+                </label>
+            </div>
         </div>
     </div>
-</div>
+</center>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
@@ -85,7 +89,10 @@
 <script src="static/js/auth.js"></script>
 <script src="static/js/app.js"></script>
 <script src="static/js/api_helper.js"></script>
+<script src="static/js/Models/schedule.js"></script>
 <script src="static/js/views/schedule.js"></script>
+<script src="static/js/Packages/bootstrap-datepicker.js"></script>
+
 </body>
 </html>
 

@@ -13,8 +13,7 @@ namespace Festispec_WebApp.Models
         public TimeSpan? ScheduleStartTime { get; set; }
         public TimeSpan? ScheduleEndTime { get; set; }
         public int? InspectorId { get; set; }
-        public bool IsDeleted { get; set; }
-
         public virtual Inspectors Inspector { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

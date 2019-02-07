@@ -30,7 +30,14 @@ namespace Festispec_WebApp.Controllers
             _mapper = mapper;
             _appSettings = appSettings.Value;
         }
- 
+
+        [HttpPost("schedule")]
+        public IActionResult ScheduledItem([FromBody] ScheduledItemDto scheduledItemDto)
+        {
+            _accountService.SetScheduleItem(scheduledItemDto);
+            return Ok();
+        }
+        
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)

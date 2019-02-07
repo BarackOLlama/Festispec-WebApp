@@ -14,8 +14,8 @@ class WebApp {
         this._CurrentInspectorId = currentInspectorId;
         $.ajaxSetup({
             headers: {
-                'Authorization': getCookie('jwt_token')
-            }
+                'Authorization': `Bearer ${getCookie("jwt_token")}`,
+            },
         });
 
         this.setInspectorByAccount(currentInspectorId);
@@ -187,6 +187,32 @@ class WebApp {
         });
     }
 
+    saveScheduledItem(scheduleModel, callBack) {
+        /**
+         * Sends post request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        $.ajax({
+            type: "POST",
+            accepts: "application/json",
+            contentType: "application/json",
+            url: '/Users/schedule/',
+            dataType: "json",
+            data: JSON.stringify(scheduleModel.convert),
+            success: function (data) {
+                return callBack(data);
+            },
+            error: function (error) {
+                console.log("Error posting model: ");
+                console.log(scheduleModel);
+                return callBack(error);
+            }
+        });
+    }
+    
     setInspectorByAccount(id) {
         $.ajax({
             type: 'GET',

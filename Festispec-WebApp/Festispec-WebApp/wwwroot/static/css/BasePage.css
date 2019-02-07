@@ -1,5 +1,5 @@
 ﻿#LoginForm {
-    background: rgb(227,227,227);
+    background: rgb(227, 227, 227);
 }
 
 /* navigation bar */
@@ -20,11 +20,11 @@
     padding-left: 25px;
 }
 
-    .navlogo img {
-        height: 110px;
-        padding-top: 15px;
-        color: white;
-    }
+.navlogo img {
+    height: 110px;
+    padding-top: 15px;
+    color: white;
+}
 
 /* THE NAV DROPDOWNLIST BEGINS HERE */
 
@@ -33,57 +33,55 @@
 }
 
 
+.button ul li {
+    list-style: none;
+    float: left;
+    position: relative;
+}
 
+.button ul li a {
+    display: block;
+    padding: 21px 14px 36px 14px;
+    font-family: arial;
+    color: white;
+    text-decoration: none;
+    font-size: 50px;
+    padding-top: 30px;
+    width: 100%;
+}
 
-    .button ul li {
-        list-style: none;
-        float: left;
-        position: relative;
-    }
+.button ul li ul {
+    display: none;
+    position: fixed;
+    left: 0px;
+    padding: 10px;
+    background-color: #fff;
+    width: 100%;
+}
 
-        .button ul li a {
-            display: block;
-            padding: 21px 14px 36px 14px;
-            font-family: arial;
-            color: white;
-            text-decoration: none;
-            font-size: 50px;
-            padding-top: 30px;
-            width: 100%;
-        }
+.button ul li:hover ul {
+    display: block;
+}
 
-        .button ul li ul {
-            display: none;
-            position: fixed;
-            left: 0px;
-            padding: 10px;
-            background-color: #fff;
-            width: 100%;
-        }
+.button ul li ul li {
+    clear: both;
+    width: 100%;
+    border-radius: 4px;
+    text-align: center;
+}
 
-        .button ul li:hover ul {
-            display: block;
-        }
+.button ul li ul li a {
+    display: block;
+    padding: 11px 10px;
+    font-family: arial;
+    color: #222;
+    text-decoration: none;
+}
 
-        .button ul li ul li {
-            clear: both;
-            width: 100%;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-            .button ul li ul li a {
-                display: block;
-                padding: 11px 10px;
-                font-family: arial;
-                color: #222;
-                text-decoration: none;
-            }
-
-            .button ul li ul li:hover {
-                background-color: #eee;
-                width: 100%;
-            }
+.button ul li ul li:hover {
+    background-color: #eee;
+    width: 100%;
+}
 
 /*  NAV DROPDOWNLIST ENDS HERE */
 
@@ -139,16 +137,16 @@
     height: 50px;
 }
 
-    .crudButton :hover {
-        background-color: #4CAF50; /* Green */
-        color: white;
-    }
-
-.buttonDiv{
-    clear:both;
-    text-align: left!important;
+.crudButton :hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
 }
 
-.answersDiv{
-    text-align: right!important;
+.buttonDiv {
+    clear: both;
+    text-align: left !important;
+}
+
+.answersDiv {
+    text-align: right !important;
 }

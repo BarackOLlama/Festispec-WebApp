@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Festispec_WebApp.DataTransferObjects;
 using Festispec_WebApp.Helpers;
 using Festispec_WebApp.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ namespace Festispec_WebApp.Services
     {
         Accounts Authenticate(string username, string password);
         IEnumerable<Accounts> GetAll();
+
+        void SetScheduleItem(ScheduledItemDto scheduledItemDto);
         Accounts GetById(int id);
         Accounts Create(Accounts user, string password);
         void Update(Accounts user, string password = null);
@@ -55,6 +58,13 @@ namespace Festispec_WebApp.Services
                 .Include(a => a.Inspectors);
         }
 
+        public void SetScheduleItem(ScheduledItemDto scheduledItemDto)
+        {
+            var scheduleItems = ToModel(scheduledItemDto);
+            _context.ScheduleItems.Add(scheduleItems);
+            _context.SaveChanges();
+        }
+
         public Accounts GetById(int id)
         {
             return _context.Accounts.Include(c => c.Inspectors)
@@ -97,7 +107,14 @@ namespace Festispec_WebApp.Services
                 _context.SaveChanges();
             }
         }
+        private int GetInspectorIdBasedOnAccountId(int accountId)
+        {
+            var inspector = _context.Inspectors
+                .Where(a => a.Account.Id == accountId)
+                .Select(i => i.Id).FirstOrDefault();
 
+            return inspector;
+        }
         // private helper methods
 
         private static void CreatePasswordHash(string password, out String passwordHash, out String passwordSalt)
@@ -123,6 +140,24 @@ namespace Festispec_WebApp.Services
             }
 
             return false;
+        }
+
+        private Inspectors GetInspector(int inspectorId)
+        {
+            return _context.Inspectors.FirstOrDefault(q => q.Id == inspectorId);
+        }
+
+        public ScheduleItems ToModel(ScheduledItemDto scheduledItemDto)
+        {
+            var inspector = GetInspector(GetInspectorIdBasedOnAccountId(scheduledItemDto.InspectorId));
+            var answer = new ScheduleItems
+            {
+                InspectorId = scheduledItemDto.InspectorId,
+                Inspector = inspector,
+                Date = scheduledItemDto.Date,
+                Scheduled = false
+            };
+            return answer;
         }
     }
 }
