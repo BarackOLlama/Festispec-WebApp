@@ -166,7 +166,7 @@ class Question {
                 let content = answer.getAnswerContent;
                 if (content) {
                     if (!content.endsWith(';')) {
-                        answer.setAnswerContent = (content + '|' + value)
+                        answer.setAnswerContent = (content + ';' + value)
                     } else {
                         answer.setAnswerContent = (content + value)
                     }
