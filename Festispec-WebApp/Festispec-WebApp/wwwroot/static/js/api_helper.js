@@ -33,12 +33,18 @@ class WebApp {
     checkIfInspectionIsDone(inspection_id) {
         let cookie = getCookie("done");
         cookie = JSON.parse(cookie);
-        let inspector_cookie = cookie[this.CurrentInspectorId.toString()];
+        let inspector_cookie = null;
+        try {
+            inspector_cookie = cookie[this.CurrentInspectorId.toString()];
+
+        } catch (e) {
+            let inspector_cookie = null;
+        }
 
         if (!cookie || !inspector_cookie) {
             return false;
         } else {
-            if(cookie[this.CurrentInspectorId.toString()].includes(inspection_id)) {
+            if (cookie[this.CurrentInspectorId.toString()].includes(inspection_id)) {
                 return true;
             }
         }
