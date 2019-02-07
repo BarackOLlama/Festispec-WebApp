@@ -84,9 +84,12 @@ class Question {
         answers.push(...ranged_answers);
 
         if (save) {
+            let save = this;
             this._post_answers_to_api(answers, function (data) {
                 if (data) {
                     alert('Saved all answers!');
+                    save.WebApp.saveInspectionFinishedToCookie(save.inspectionId);
+                    console.log(save.WebApp.checkIfInspectionIsDone(save.inspectionId));
                 } else {
                     alert('Something went wrong!');
                 }

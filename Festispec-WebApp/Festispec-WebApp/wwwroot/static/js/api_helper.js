@@ -5,9 +5,9 @@ class WebApp {
      * @param currentInspectorId
      */
     constructor(currentInspectorId = null) {
-        if(!currentInspectorId) {
+        if (!currentInspectorId) {
             currentInspectorId = getCookie('user_id');
-            if(!isNaN(currentInspectorId)) {
+            if (!isNaN(currentInspectorId)) {
                 checkIfLoggedIn();
             }
         }
@@ -17,7 +17,7 @@ class WebApp {
                 'Authorization': getCookie('jwt_token')
             }
         });
-        
+
         this.setInspectorByAccount(currentInspectorId);
 
     }
@@ -29,7 +29,44 @@ class WebApp {
     set CurrentInspectorId(value) {
         this._CurrentInspectorId = value;
     }
-    
+
+    checkIfInspectionIsDone(inspection_id) {
+        let cookie = getCookie("done");
+        cookie = JSON.parse(cookie);
+        let inspector_cookie = cookie[this.CurrentInspectorId.toString()];
+
+        if (!cookie || !inspector_cookie) {
+            return false;
+        } else {
+            if(cookie[this.CurrentInspectorId.toString()].includes(inspection_id)) {
+                return true;
+            }
+        }
+    }
+
+    saveInspectionFinishedToCookie(inspection_id) {
+        let cookie = getCookie("done");
+        if (cookie) {
+            cookie = JSON.parse(cookie);
+            let inspector_cookie = cookie[this.CurrentInspectorId.toString()];
+            if (!inspector_cookie) {
+                cookie[this.CurrentInspectorId] = `{[${inspection_id}]}`;
+
+            } else {
+                let length = cookie[this.CurrentInspectorId.toString()].length;
+                cookie[this.CurrentInspectorId.toString()][length] = inspection_id;
+                console.log(cookie);
+            }
+            eraseCookie("done");
+            setCookie("done", JSON.stringify(cookie), 99);
+        } else {
+            let json = `{"${this.CurrentInspectorId}": [${inspection_id.toString()}]}`;
+            cookie = JSON.parse(json);
+            setCookie("done", JSON.stringify(cookie), 99);
+        }
+        return;
+    }
+
     postAnswer(answer, callBack) {
         /**
          * Sends post request to target, receives response
@@ -54,7 +91,7 @@ class WebApp {
             }
         });
     }
-    
+
     getInspectors(callBack) {
         /**
          * Sends get request to target, receives response
@@ -71,7 +108,7 @@ class WebApp {
             }
         });
     }
-    
+
     getAllInspections(callBack) {
         /**
          * Sends get request to target, receives response
@@ -88,7 +125,7 @@ class WebApp {
             }
         });
     }
-    
+
     getInspections(callBack) {
         /**
          * Sends get request to target, receives response
@@ -107,7 +144,7 @@ class WebApp {
             }
         });
     }
-    
+
     getFinishedInspections(callBack) {
         /**
          * Sends get request to target, receives response
@@ -126,7 +163,7 @@ class WebApp {
             }
         });
     }
-    
+
     getInspection(InspectionId, callBack) {
         /**
          * Sends get request to target, receives response
@@ -143,7 +180,7 @@ class WebApp {
             }
         });
     }
-    
+
     setInspectorByAccount(id) {
         $.ajax({
             type: 'GET',
@@ -157,7 +194,7 @@ class WebApp {
             }
         });
     }
-    
+
     getQuestionnaire(QuestionnaireId, callBack) {
         /**
          * Sends get request to target, receives response
@@ -174,6 +211,7 @@ class WebApp {
             }
         });
     }
+
     getQuestionnaireByInspection(InspectionId, callBack) {
         /**
          * Sends get request to target, receives response

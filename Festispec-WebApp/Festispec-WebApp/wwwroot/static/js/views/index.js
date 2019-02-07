@@ -20,13 +20,18 @@ class Index {
 
         //backup this to use out of scope
         // Run function from api_helper, retrieving the data for this inspector.
+        let self = this;
         this.WebApp.getInspections(function (inspectorData) {
             console.log(inspectorData);
+            let check = false;
             // returns the inspector's data, and if not leave the ul empty or write no inspections
             if (inspectorData) {
                 // foreach through inspectorData, if you want to see the data before accessing it just execute console.log(inspectorData);
                 // And check the console tab in your "Inspect element" option in the browser
                 for (let index in inspectorData) {
+                    if(self.WebApp.checkIfInspectionIsDone(inspectorData[index].id)) {
+                        continue;
+                    }
                     let a = document.createElement('a');
                     a.id = inspectorData[index].id;
                     a.style.color = "blue";
@@ -76,9 +81,12 @@ class Index {
                                 )
                             )
                         )
-                    )
+                    );
+                    console.log("updated true");
+                    check = true;
                 }
-            } else {
+            } 
+            if(!check){
                 // write no inspection in ul
                 target_ul.append(
                     // Add <li> to ul (list element)
