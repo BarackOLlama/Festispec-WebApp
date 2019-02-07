@@ -114,6 +114,22 @@ class WebApp {
             }
         });
     }
+    getScheduledItems(accountId, callBack) {
+        /**
+         * Sends get request to target, receives response
+         *
+         * @param url Target URL
+         * @param auth Authentication details
+         * @param cb CallBack method
+         */
+        $.ajax({
+            type: 'GET',
+            url: `/Users/${accountId}`,
+            success: function (data) {
+                return callBack(data.inspectors[0].scheduleItems);
+            }
+        });
+    }
 
     getAllInspections(callBack) {
         /**

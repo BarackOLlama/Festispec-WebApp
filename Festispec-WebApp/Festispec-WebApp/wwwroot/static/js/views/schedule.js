@@ -13,8 +13,18 @@ class Schedule {
             format: 'yyyy/mm/dd',
             startDate: '-3d'
         });
+        this.render();
     }
-
+    render() {
+        this.WebApp.getScheduledItems(this.WebApp.CurrentInspectorId, function (data) {
+            console.log(data);
+            for(let i = 0; i < data.length; i++) {
+                $('#schedule').append(
+                    $('<li style="list-style: none">').append(data[i].date.split("T")[0])
+                )
+            }
+        })
+    }
     save() {
         let data = (this.calendar.val());
         if (!data) {
@@ -30,7 +40,7 @@ class Schedule {
                     console.log("Success");
                     console.log(data)
                 }
-                
+                location.reload();
             });
         }
     }
